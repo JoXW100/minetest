@@ -14,9 +14,12 @@ class Board:
     """
 
     def __init__(self, size = 5):
-        size = max(min(9, size), 2)
+        assert(size > 0)
         self.__size = size
-        self.__rows = [[st.BoardCell() for _ in range(size)] for b in range(size)]
+        self.__rows = [
+            [ st.BoardCell(st.Location(x, y)) for x in range(size)] 
+            for y in range(size)
+        ]
     
     @property
     def size(self):
@@ -26,7 +29,7 @@ class Board:
     def rows(self) -> list[list[st.BoardCell]]:
         return self.__rows
     
-    def select(self, loc: st.Location) -> st.Piece:
+    def select(self, loc: st.Location) -> st.BoardCell:
         """
         Returns the top piece at the given location, or None if the location is 
         invalid or no piece exists at the given location.
@@ -38,13 +41,13 @@ class Board:
         
         Returns
         -------
-        piece : piece.Piece
-            The top piece at the given location, or None
+        cell : BoardCell
+            The cell at the given location, or None
         """
         
         if not loc.validate(self.size):
             return None
-        return self.rows[loc.y][loc.x].top
+        return self.rows[loc.y][loc.x]
     
     def get_adjacent(self, loc: st.Location, filter = lambda x: True) -> list[st.Location]:
         """
@@ -62,46 +65,32 @@ class Board:
         list[Location]
             A list of adjacent locations that pass the given filter
         """
-        a = st.Location(loc.x, loc.y + 1) # Above
-        b = st.Location(loc.x, loc.y - 1) # Below
-        r = st.Location(loc.x + 1, loc.y) # Right
-        l = st.Location(loc.x - 1, loc.y) # Left
-        # Return all locations that are on the board, and pass the given filter 
-        return [l for l in [a,b,r,l] if l.validate(self.size) and filter(l)] 
-    
-    def get_all_locations(self) -> list[st.Location]:
-        """
-        Creates a list of all the available locations on the board
-        
-        Returns
-        -------
-        locs : list[location.Location]
-            A list of all the available locations on the board
-        """
-        return [st.Location(x, y) for x in range(self.size) for y in range(self.size)]
+        return [ l for l in 
+            [ st.Location(x, y) 
+                for x in range(loc.x - 1, loc.x + 2) 
+                for y in range(loc.y - 1, loc.y + 2) 
+            ] if l != loc and l.validate(self.size) and filter(l)
+        ]
     
     def __eq__(self, other) -> bool:
         if not isinstance(other, Board) or self.size != other.size:
             return False
         for (row_a, row_b) in zip(self.rows, other.rows):
             for (cell_a, cell_b) in zip(row_a, row_b):
-                if (cell_a != cell_b):
+                if cell_a != cell_b:
                     return False
         return True
     
     def __str__(self) -> str:
         text = ""
-        size = len(self.rows)
-        for y in range(size + 2):
+        for y in range(self.size + 2):
             if y == 0:
-                for i in range(size):
-                    text += '     ' + chr(65 + i)
-                text += '\n  ┌' +  '─────┬' * (size - 1) + '─────┐\n'
-            elif y == (size + 1):
-                text +=   '  └' +  '─────┴' * (size - 1) + '─────┘\n'
+                text += ' ┌─' +  '──' * (self.size - 1) + '──┐\n'
+            elif y == (self.size + 1):
+                text += ' └─' +  '──' * (self.size - 1) + '──┘\n'
             else:
-                text += str(y) + ' │ '
+                text += ' │'
                 for cell in self.rows[y - 1]:
-                    text += str(cell) + ' │ '
-                text += '\n' if y == size else '\n  ├' +  '─────┼' * (size - 1) + '─────┤\n'
+                    text += ' ' + str(cell)
+                text += ' │\n'
         return text
