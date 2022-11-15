@@ -13,7 +13,7 @@ class MainMenu(ui.MenuItem):
     
     def start(self, data: GameData) -> bool:
         # TODO: Make more fancy
-        print("Welcome to Mine Sweeper!") 
+        print("\n    Welcome to Mine Sweeper!") 
         return True
     
     # Catch last menu events
