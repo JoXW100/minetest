@@ -24,7 +24,7 @@ class Size12Item(ui.MenuItem):
 class BoardSizeMenu(ui.MenuItem):
     def __init__(self):
         super().__init__()
-        self._key = 'B'
+        self._key = 'C'
         self._title = 'Change Board Size'
         self._options = [
             Size5Item(),
