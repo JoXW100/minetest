@@ -1,12 +1,17 @@
-import structure as st
-
 class GameData:
     """
+    Persistent data when navigating between menus.
     
+    Attributes
+    ----------
+    size : int
+        the size of the board
+    mines : int
+        the number of mines on the board
+    difficulty : int
+        the difficulty index
     """
     def __init__(self):
         self.size:int = 5
-        self.players:list[st.Player] = []
+        self.mines = 5
         self.difficulty:int = 1
-        self.colors:list[str] = []
-        self.data = {}
