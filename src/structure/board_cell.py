@@ -1,34 +1,59 @@
-from __future__ import annotations
+from enum import Enum
 import structure as st
 
-class BoardCell(st.Stack[st.Piece]):
+class CellState(Enum):
+    Visible = ' '
+    Hidden  = '■'
+    Flagged = '⚑'
+
+class BoardCell:
     """
-    Represents a board cell containing a stack of pieces.
+    Represents a cell on the board.
 
     Attributes
     ----------
-    top : Piece
-        The top piece in the cell
-    size : int
-        The number of pieces in the cell
-
+    state : CellState
+        The state of the cell
+    mined : bool
+        If there is a mine in this cell
+    location : Location
+        The location of this cell in the board
+        
     Methods
     -------
-    put(item : T) -> None
-        Adds an piece to the top of the stack
-    pop(item : T) -> T
-        Removes the top piece of in stack and returns it
-    is_empty() -> bool
-        Checks if the cell is empty
+    set_mined(state : bool) -> None
+        Sets the mined state of the cell
+    set_state(state : CellState) -> None
+        Sets the visible state of the cell
     """
-    @property
-    def is_empty(self) -> bool:
-        return super().size == 0
+    def __init__(self, loc: st.Location):
+        self.__state = CellState.Hidden
+        self.__mined = False
+        self.__location = loc
+    
+    @property 
+    def state(self) -> CellState:
+        return self.__state
+      
+    @property 
+    def location(self) -> st.Location:
+        return self.__location
+    
+    @property 
+    def mined(self) -> bool:
+        return self.__mined
+    
+    def set_mined(self, state: bool = True):
+        self.__mined = state
+        
+    def set_state(self, state: CellState):
+        self.__state = state
+        
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, BoardCell) \
+            and self.location == other.location \
+            and self.state == other.state \
+            and self.mined == other.mined
     
     def __str__(self) -> str:
-        if (self.is_empty):
-            return '   '
-        else:
-            char = 'F' if self.top.state is st.Piece.FLAT else 'S'
-            size = str(self.size) if self.size >= 10 else str(self.size) + ' '
-            return self.top.owner.color + char + size + st.Color.WHITE
+        return self.__state.value
