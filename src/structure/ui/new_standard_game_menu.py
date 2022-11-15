@@ -13,6 +13,12 @@ class NewStandardGameMenu(ui.MenuItem):
             ui.QuitItem()
         ]
         
+    def start(self, data: GameData) -> bool:
+        data.difficulty = 1
+        data.size = 9
+        data.mines = 15
+        return True
+        
     def update(self, data: GameData):
         self._info = '    Difficulty: ' \
             + ['Easy', 'Medium', 'Hard'][data.difficulty] + '\n---'

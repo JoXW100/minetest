@@ -14,6 +14,11 @@ class NewCustomGameMenu(ui.MenuItem):
             ui.QuitItem()
         ]
         
+    def start(self, data: GameData) -> bool:
+        data.size = 4
+        data.mines = 5
+        return True
+        
     def update(self, data: GameData):
         self._info = '    Board Size: ' \
             + str(data.size) + 'x' + str(data.size) + '\n' \
