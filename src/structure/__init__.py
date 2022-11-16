@@ -1,4 +1,4 @@
-from .action import Action
+from .action import Action, ActionOutcome
 from .stack import Stack
 from .piece import Piece
 from .board_cell import BoardCell, CellState

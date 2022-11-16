@@ -1,4 +1,4 @@
-from structure import Action, GameState
+from structure import Action, GameState, ActionOutcome
 import sys
 
 class Exit(Action):
@@ -10,29 +10,13 @@ class Exit(Action):
         return "Exit"
     
     @staticmethod
-    def check(state: GameState) -> bool:
-        return False
+    def get_key() -> str:
+        return 'Q'
         
     @staticmethod
-    def execute(state: GameState) -> int:
+    def execute(state: GameState) -> ActionOutcome:
         sys.exit("Exiting...")
-        return Action.IGNORE
-    
-    @staticmethod
-    def unsafe_execute(state: GameState):
-        pass
-
-    @staticmethod
-    def undo(state: GameState):
-        pass
-
-    @staticmethod
-    def ask_args(state: GameState) -> list[any]:
-        return []
-    
-    @staticmethod
-    def get_args(state: GameState) -> list[list[any]]:
-        return []
+        return ActionOutcome.IGNORE
     
     @staticmethod
     def to_str():
