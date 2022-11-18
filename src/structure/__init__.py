@@ -1,4 +1,5 @@
 from .action import Action
+from .location import Location
 from .board_cell import BoardCell, CellState 
 from .board import Board
 from .color import Color

@@ -102,13 +102,13 @@ class GameState:
             The direction to move
         """
         res = None
-        if dir is 0: #Direction.Up:
+        if dir is Direction.Up:
             res = st.Location(self.selection.x, self.selection.y - 1)
-        elif dir is 1: #Direction.Right:
+        elif dir is Direction.Right:
             res = st.Location(self.selection.x + 1, self.selection.y)
-        elif dir is 2: #Direction.Down:
+        elif dir is Direction.Down:
             res = st.Location(self.selection.x, self.selection.y + 1)
-        elif dir is 3: #Direction.Left:
+        elif dir is Direction.Left:
             res = st.Location(self.selection.x - 1, self.selection.y)
         if res.validate(self.board.size):
             self.__selection = res
@@ -132,8 +132,7 @@ class GameState:
                 if cell.mined and cell.state is st.CellState.Visible:
                     return GameStatus.Lost
                 # Not all cells without mines are revealed -> Playing
-                if not cell.mined \
-                and cell.state is not st.CellState.Visible:
+                if not cell.mined and cell.state is not st.CellState.Visible:
                     status = GameStatus.Playing
         return status
     
@@ -148,9 +147,9 @@ class GameState:
             else:
                 text += ' │'
                 for cell in self.board.rows[y - 1]:
-                    val = st.Color.colored_text(st.Color.GREEN, str(cell)) if cell.location == self.selection else str(cell)
-                    text += ' ' + val
-                text += ' │\n'
+                    text += ' ' + (st.Color.colored_text(st.Color.GREEN, str(cell)) \
+                        if cell.location == self.selection else str(cell)) 
+                text += ' │\n' 
         print(text)
     
     def __eq__(self, other: object):
