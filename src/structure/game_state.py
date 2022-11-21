@@ -50,7 +50,7 @@ class GameState:
     
     def __init__(self, actions: list[st.Action], size: int = 5, mines: int = 0, round: int = 0):
         self.__board = st.Board(size)
-        self.__player = st.Player(1)
+        self.__player = st.Player()
         self.__mines = mines
         self.__actions = actions
         self.__selection = st.Location(0, 0)
@@ -151,6 +151,16 @@ class GameState:
                         if cell.location == self.selection else str(cell)) 
                 text += ' │\n' 
         print(text)
+        
+    def get_action(self, key) -> st.Action:
+        try:
+            print("input: " + str(key))
+            print("code:" + str(key.char))
+            if key.char == "q":
+                print("q was pressed")
+                return None
+        except AttributeError:
+            pass
     
     def __eq__(self, other: object):
         return isinstance(other, GameState) \

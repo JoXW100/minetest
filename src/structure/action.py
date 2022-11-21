@@ -1,7 +1,7 @@
 from __future__ import annotations
 from enum import Enum
 from abc import ABCMeta, abstractmethod
-import structure.game_state as gs
+import structure as st
 
 class ActionOutcome(Enum):
     FAILED = 0
@@ -48,7 +48,7 @@ class Action(metaclass = ABCMeta):
 
     @staticmethod
     @abstractmethod
-    def execute(state: gs.GameState, *args: list[any]) -> ActionOutcome:
+    def execute(state: st.GameState, *args: list[any]) -> ActionOutcome:
         """
         Executes the action if it is valid given the current game state
 
