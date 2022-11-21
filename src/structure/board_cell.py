@@ -1,3 +1,4 @@
+from __future__ import annotations
 from enum import Enum
 import structure as st
 
@@ -26,10 +27,11 @@ class BoardCell:
     set_state(state : CellState) -> None
         Sets the visible state of the cell
     """
-    def __init__(self, loc: st.Location):
+    def __init__(self, loc: st.Location, board: st.Board):
         self.__state = CellState.Hidden
         self.__mined = False
         self.__location = loc
+        self.__board = board
     
     @property 
     def state(self) -> CellState:
@@ -56,4 +58,7 @@ class BoardCell:
             and self.mined == other.mined
     
     def __str__(self) -> str:
-        return self.__state.value
+        mined = len(self.__board.get_neighbors(self.location, lambda x: x.mined))
+        return str(mined) \
+            if mined > 0 and self.state is CellState.Visible \
+            else '🕱' if self.mined and self.state is CellState.Visible else self.__state.value

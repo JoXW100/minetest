@@ -47,7 +47,7 @@ class Location:
             and self.__y < limit
     
     def __str__(self) -> str:
-        return chr(self.x + 65) + str(self.y + 1)
+        return '(' + str(self.x) + ', ' + str(self.y) + ')' 
     
     def __repr__(self) -> str:
         return self.__str__()
@@ -56,3 +56,6 @@ class Location:
         return isinstance(other, Location) \
             and self.x == other.x \
             and self.y == other.y
+            
+    def __hash__(self) -> int:
+        return ((self.x + self.y) * (self.x + self.y + 1) >> 1) + self.y
