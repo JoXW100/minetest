@@ -76,30 +76,6 @@ class Board:
             and l.validate(self.size) 
             and filter(self.rows[l.y][l.x])
         ]
-        
-    def get_adjacent(self, loc: st.Location, filter: Callable[[st.BoardCell], bool] = lambda x: True) -> list[st.BoardCell]:
-        """
-        Returns all valid adjacent cells (4) to the given location that pass
-        the given filter 
-        
-        Attributes
-        ----------
-        loc : Location
-            the location to find surrounding tiles
-        filter : callable(BoardCell) -> Bool
-            the filter each location must pass 
-        Returns
-        -------
-        list[BoardCell]
-            A list of adjacent cells that pass the given filter
-        """
-        a = st.Location(loc.x, loc.y + 1) # Above
-        b = st.Location(loc.x, loc.y - 1) # Below
-        r = st.Location(loc.x + 1, loc.y) # Right
-        l = st.Location(loc.x - 1, loc.y) # Left
-        # Return all locations that are on the board, and pass the given filter 
-        return [self.rows[l.y][l.x] for l in [a,b,r,l] if l.validate(self.size) 
-                and filter(self.rows[l.y][l.x])] 
     
     
     def get_all_cells(self) -> list[st.BoardCell]:
@@ -119,11 +95,13 @@ class Board:
         while len(stack) > 0:
             cell = stack.pop()
             cell.set_state(st.CellState.Visible)
-            for adj in self.get_adjacent(cell.location):
-                if adj.location not in visited:
-                    visited.add(adj.location)
-                    if adj.state is st.CellState.Hidden and not adj.mined:
-                        stack.appendleft(adj)
+            neighbors = self.get_neighbors(cell.location)
+            if len([x for x in neighbors if x.mined]) == 0:
+                for adj in neighbors:
+                    if adj.location not in visited:
+                        visited.add(adj.location)
+                        if adj.state is st.CellState.Hidden and not adj.mined:
+                            stack.appendleft(adj)
     
     def reveal_cell(self, loc: st.Location) -> bool:
         """
@@ -141,9 +119,10 @@ class Board:
             If the revealed cell was mined
         """
         cell = self.select(loc)
-        if cell is None or cell.state is not st.CellState.Hidden or cell.mined:
-            return cell.mined
+        if cell is None:
+            return False
         self.__inner_reveal(cell)
+        return cell.mined
                
     def reveal_and_distribute(self, loc: st.Location, num: int) -> bool:
         """

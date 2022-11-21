@@ -61,4 +61,4 @@ class BoardCell:
         mined = len(self.__board.get_neighbors(self.location, lambda x: x.mined))
         return str(mined) \
             if mined > 0 and self.state is CellState.Visible \
-            else self.__state.value
+            else '🕱' if self.mined and self.state is CellState.Visible else self.__state.value
