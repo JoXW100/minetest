@@ -3,15 +3,15 @@ from enum import Enum
 import structure as st
 
 class Direction(Enum):
-    Up: 0
-    Right: 1
-    Down: 2
-    Left: 3
+    Up = 0
+    Right = 1
+    Down = 2
+    Left = 3
 
 class GameStatus(Enum):
-    Won: 0
-    Lost: 1
-    Playing: 2
+    Won = 0
+    Lost = 1
+    Playing = 2
 
 class GameState:
     """
