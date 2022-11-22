@@ -1,6 +1,7 @@
 from .exit import Exit
 from .navigate import NavigateUp, NavigateRight, NavigateDown, NavigateLeft
 from .reveal import Reveal
+from .flag import Flag
 
 ALL_ACTIONS = [
     NavigateUp(), 
@@ -8,5 +9,6 @@ ALL_ACTIONS = [
     NavigateDown(), 
     NavigateLeft(), 
     Reveal(),
+    Flag(),
     Exit()
 ]
