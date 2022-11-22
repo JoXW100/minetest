@@ -6,10 +6,15 @@ class MainMenu(ui.MenuItem):
         super().__init__()
         self._title = 'Main Menu'
         self._options = [
-            ui.NewGameMenu(), 
-            # ui.NewTournamentMenu(), 
+            ui.NewStandardGameMenu(), 
+            ui.NewCustomGameMenu(), 
             ui.QuitItem()
         ]
+    
+    def start(self, data: GameData) -> bool:
+        # TODO: Make more fancy
+        print("\n    Welcome to Mine Sweeper!") 
+        return True
     
     # Catch last menu events
     def open(self, data: GameData = GameData()):
