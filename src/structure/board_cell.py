@@ -6,6 +6,8 @@ class CellState(Enum):
     Visible = ' '
     Hidden  = '■'
     Flagged = '⚑'
+    
+MINE_TEXT:str = st.Color.colored_text(st.Color.RED, '○')
 
 class BoardCell:
     """
@@ -58,7 +60,9 @@ class BoardCell:
             and self.mined == other.mined
     
     def __str__(self) -> str:
+        if self.mined and self.state is CellState.Visible:
+            return MINE_TEXT
         mined = len(self.__board.get_neighbors(self.location, lambda x: x.mined))
         return str(mined) \
             if mined > 0 and self.state is CellState.Visible \
-            else '🕱' if self.mined and self.state is CellState.Visible else self.__state.value
+            else self.__state.value
