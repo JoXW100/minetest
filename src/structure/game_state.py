@@ -152,15 +152,11 @@ class GameState:
                 text += ' │\n' 
         print(text)
         
-    def get_action(self, key) -> st.Action:
-        try:
-            print("input: " + str(key))
-            print("code:" + str(key.char))
-            if key.char == "q":
-                print("q was pressed")
-                return None
-        except AttributeError:
-            pass
+    def get_action(self, key) -> st.Action|None:
+        for action in self.actions:
+            if action.get_key() == key:
+                return action
+        return None
     
     def __eq__(self, other: object):
         return isinstance(other, GameState) \

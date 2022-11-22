@@ -1,5 +1,6 @@
 from structure import Action, GameState, ActionOutcome
-import sys
+from pynput.keyboard import Key, KeyCode
+import os
 
 class Exit(Action):
     """
@@ -10,12 +11,13 @@ class Exit(Action):
         return "Exit"
     
     @staticmethod
-    def get_key() -> str:
-        return 'Q'
+    def get_key() -> KeyCode:
+        return KeyCode.from_char('q')
         
     @staticmethod
     def execute(state: GameState) -> ActionOutcome:
-        sys.exit("Exiting...")
+        print("Exiting...")
+        os._exit(0)
         return ActionOutcome.IGNORE
     
     @staticmethod

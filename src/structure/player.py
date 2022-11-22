@@ -21,9 +21,14 @@ class Player:
             cls._instances[cls] = super(cls).__call__(*args, **kwargs)
         return cls._instances[cls]
     
-    def perform_turn(self, state : st.GameState, key: str) -> bool:
+    def perform_turn(self, state: st.GameState, key: str) -> bool:
         # TODO: Implement after board & BoardCell has been implemented
 
-        action: st.Action = state.get_action(key)
-        return action is None
-        #raise NotImplementedError
+        action = state.get_action(key)
+        if action is not None:
+            outcome = action.execute(state)
+            if outcome is st.ActionOutcome.SUCCEEDED:
+                state.next_round()
+            elif outcome is st.ActionOutcome.FAILED:
+                print("Failed: " + action.to_str())
+        return action is not None

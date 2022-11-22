@@ -19,15 +19,15 @@ def clear_terminal():
 def run(state : GameState):
     def on_press(key):
         res = state.player.perform_turn(state, key)
-        return res and handle_victory(state)
+        return not res
     
-    with keyboard.Listener(on_press=on_press) as listener:
+    while handle_victory(state):
         clear_terminal()
         state.print_board()
-
-        # Block and listen for key press.
-        listener.join()
+        with keyboard.Listener(on_press=on_press) as listener:
+            # Block and listen for key press.
+            listener.join()
 
 if __name__ == "__main__":
-    gs = GameState(ALL_ACTIONS, 5, 16)
+    gs = GameState(ALL_ACTIONS, 5, 8)
     run(gs)

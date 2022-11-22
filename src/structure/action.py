@@ -1,6 +1,7 @@
 from __future__ import annotations
 from enum import Enum
 from abc import ABCMeta, abstractmethod
+from pynput.keyboard import KeyCode
 import structure as st
 
 class ActionOutcome(Enum):
@@ -35,7 +36,7 @@ class Action(metaclass = ABCMeta):
     
     @staticmethod
     @abstractmethod
-    def get_key() -> str:
+    def get_key() -> KeyCode:
         """
         Gets the name of the action
         
