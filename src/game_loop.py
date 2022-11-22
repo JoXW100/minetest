@@ -1,27 +1,33 @@
-from structure import GameState, Player
-
-def find_player_with_id(state: GameState, id: int) -> Player:
-    for player in state.players:
-        if player.identifier == id:
-            return player
-    return None
+from structure import GameState, GameStatus
+from structure.actions import ALL_ACTIONS
+from pynput import keyboard
+import os
 
 def handle_victory(state: GameState) -> bool:
-    victory = state.is_game_over()
-    if victory == state.PLAYING:
+    status = state.get_game_status()
+    if status is GameStatus.Playing:
         return True
-    print("\n====== Game Over ======\n", state.board, sep='')
-    if victory == state.DRAW:
-        print("There was a draw!")
-    else:
-        player = find_player_with_id(state, victory)
-        if player is None:
-            print("Player #" + str(victory) + " won!")
-        else:
-            print(str(player) + ' won!')
+    if status is GameStatus.Won:
+        print("You Won!")
+    if status is GameStatus.Lost:
+        print("You Lost!")
     return False
-    
+
+def clear_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def run(state : GameState):
+    def on_press(key):
+        res = state.player.perform_turn(state, key)
+        return not res
+    
     while handle_victory(state):
-        state.current_player.perform_turn(state)
-        state.next_round()
+        clear_terminal()
+        state.print_board()
+        with keyboard.Listener(on_press=on_press) as listener:
+            # Block and listen for key press.
+            listener.join()
+
+if __name__ == "__main__":
+    gs = GameState(ALL_ACTIONS, 5, 8)
+    run(gs)
