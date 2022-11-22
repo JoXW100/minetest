@@ -1,3 +1,7 @@
 from .exit import Exit
+from .reveal import Reveal
 
-ALL_ACTIONS = [Exit()]
+ALL_ACTIONS = [
+    Reveal(),
+    Exit()
+]
