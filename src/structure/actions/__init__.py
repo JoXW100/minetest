@@ -1,3 +1,7 @@
 from .exit import Exit
+from .flag import Flag
 
-ALL_ACTIONS = [Exit()]
+ALL_ACTIONS = [
+    Flag(),
+    Exit()
+]
