@@ -15,14 +15,10 @@ class Reveal(Action):
         
     @staticmethod
     def execute(state: GameState) -> ActionOutcome:
-        print("Reveal: round = " + str(state.round))
-        res = False
-        if state.round < 1:
-            res = state.board.reveal_and_distribute(state.selection, state.mines)
-        else:
-            res = state.board.reveal_cell(state.selection)
+        res = state.reveal_and_distribute(state.selection, state.mines) \
+            if state.round == 0 else state.reveal_cell(state.selection)
         return ActionOutcome.SUCCEEDED if res else ActionOutcome.FAILED
     
     @staticmethod
     def to_str():
-        return "Reveals cell"
+        return "Reveal cell"

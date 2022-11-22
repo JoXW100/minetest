@@ -1,4 +1,4 @@
-from helpers import HiddenPrints
+from hidden_prints import HiddenPrints
 from tests import ALL_TESTS
 
 if __name__ == "__main__":

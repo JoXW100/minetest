@@ -20,7 +20,7 @@ class NavigateUp(Action):
     
     @staticmethod
     def to_str():
-        return "Navigates up"
+        return "Navigate up"
 
 class NavigateRight(Action):
     """
@@ -41,7 +41,7 @@ class NavigateRight(Action):
     
     @staticmethod
     def to_str():
-        return "Navigates right"
+        return "Navigate right"
    
 class NavigateDown(Action):
     """
@@ -62,7 +62,7 @@ class NavigateDown(Action):
     
     @staticmethod
     def to_str():
-        return "Navigates right"
+        return "Navigate right"
     
 class NavigateLeft(Action):
     """
@@ -83,4 +83,4 @@ class NavigateLeft(Action):
     
     @staticmethod
     def to_str():
-        return "Navigates left"
+        return "Navigate left"

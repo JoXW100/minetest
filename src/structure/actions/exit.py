@@ -22,4 +22,4 @@ class Exit(Action):
     
     @staticmethod
     def to_str():
-        return "Exits game"
+        return "Exit game"

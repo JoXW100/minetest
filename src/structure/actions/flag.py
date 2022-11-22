@@ -23,4 +23,4 @@ class Flag(Action):
     
     @staticmethod
     def to_str():
-        return "Reveals cell"
+        return "Flag cell"

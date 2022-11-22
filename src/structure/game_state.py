@@ -1,5 +1,7 @@
 from __future__ import annotations
 from enum import Enum
+from collections import deque
+from random import randint
 import structure as st
 
 class Direction(Enum):
@@ -112,6 +114,95 @@ class GameState:
             res = st.Location(self.selection.x - 1, self.selection.y)
         if res.validate(self.board.size):
             self.__selection = res
+            
+    def __inner_reveal(self, cell: st.BoardCell):
+        # Keep track of iterated cells to avoid visiting the same cell multiple 
+        # times and getting stuck in a loop
+        visited = {cell.location}
+        # The pending cells to visit & reveal
+        stack = deque([cell])
+        while len(stack) > 0:
+            # reveal the cell first in the stack
+            cell = stack.pop()
+            cell.set_state(st.CellState.Visible)
+            neighbors = self.board.get_neighbors(cell.location)
+            # If no neighboring cell is mined, reveal them.
+            if all(not cell.mined for cell in neighbors):
+                for cell in neighbors:
+                    if cell.location not in visited:
+                        visited.add(cell.location)
+                        if cell.state is st.CellState.Hidden and not cell.mined:
+                            stack.appendleft(cell)
+    
+    def reveal_cell(self, loc: st.Location) -> bool:
+        """
+        Reveals the cell at the given location if it is hidden. Reveals all
+        other hidden cells connected to it if they are not mined.
+        
+        Attributes
+        ----------
+        loc : Location
+            the location of the cell reveal
+        
+        Returns
+        -------
+        mined : bool
+            If the revealed cell was mined
+        """
+        cell = self.board.select(loc)
+        if cell is None or cell.state is not st.CellState.Hidden:
+            return False
+        if cell.mined:
+            cell.set_state(st.CellState.Visible)
+            return True
+        else:
+            self.__inner_reveal(cell)
+            return False
+               
+    def reveal_and_distribute(self, loc: st.Location, num: int) -> bool:
+        """
+        Reveals the cell at the given location if it is hidden and not mined. 
+        Distributes mines on other hidden cells on the board and reveals other 
+        hidden cells connected to the cell at the given location if they are 
+        not mined.
+        
+        Attributes
+        ----------
+        loc : Location
+            the location of the cell reveal
+        num : int
+            the number of mines to distribute
+        
+        Returns
+        -------
+        success : bool
+            If the cell at the given location could be revealed
+        """
+        cell = self.board.select(loc) 
+        if cell is None or cell.state is not st.CellState.Hidden or cell.mined:
+            return False
+        cell.set_state(st.CellState.Visible)
+        self.distribute_mines(num)
+        self.__inner_reveal(cell)
+        return True
+     
+    def distribute_mines(self, num: int):
+        """
+        Distributes up to the given number of mines on board cells randomly. 
+        
+        Attributes
+        ----------
+        num : int
+            the number of mines to distribute
+        """
+        cells = self.board.get_all_cells()
+        while num > 0 and len(cells) > 0:
+            i = randint(0, len(cells) - 1)
+            cell = cells[i]
+            if cell.state is st.CellState.Hidden and not cell.mined:
+                num -= 1
+                cell.set_mined()
+            cells.pop(i)
 
     def get_game_status(self) -> GameStatus:
         """
@@ -135,6 +226,12 @@ class GameState:
                 if not cell.mined and cell.state is not st.CellState.Visible:
                     status = GameStatus.Playing
         return status
+    
+    def reveal_mines(self):
+        for row in self.board.rows:
+            for cell in row:
+                if cell.mined:
+                    cell.set_state(st.CellState.Visible)
     
     def print_board(self):
         size = self.board.size

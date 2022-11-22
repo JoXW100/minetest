@@ -22,13 +22,13 @@ class Player:
         return cls._instances[cls]
     
     def perform_turn(self, state: st.GameState, key: str) -> bool:
-        # TODO: Implement after board & BoardCell has been implemented
-
         action = state.get_action(key)
         if action is not None:
             outcome = action.execute(state)
             if outcome is st.ActionOutcome.SUCCEEDED:
                 state.next_round()
             elif outcome is st.ActionOutcome.FAILED:
+                # Find better way, this is cleared instantly
                 print("Failed: " + action.to_str())
-        return action is not None
+            return True
+        return False

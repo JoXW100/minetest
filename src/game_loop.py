@@ -3,18 +3,25 @@ from structure.actions import ALL_ACTIONS
 from pynput import keyboard
 import os
 
+def clear_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def handle_victory(state: GameState) -> bool:
     status = state.get_game_status()
     if status is GameStatus.Playing:
         return True
     if status is GameStatus.Won:
+        clear_terminal()
         print("You Won!")
     if status is GameStatus.Lost:
-        print("You Lost!")
+        clear_terminal()
+        state.reveal_mines()
+        state.print_board()
+        print()
     return False
 
-def clear_terminal():
-    os.system('cls' if os.name == 'nt' else 'clear')
+# use for debug and testing
+global listener
 
 def run(state : GameState):
     def on_press(key):
@@ -26,7 +33,7 @@ def run(state : GameState):
         state.print_board()
         with keyboard.Listener(on_press=on_press) as listener:
             # Block and listen for key press.
-            listener.join()
+            keyboard.Listener.join(listener)
 
 if __name__ == "__main__":
     gs = GameState(ALL_ACTIONS, 5, 8)
