@@ -1,4 +1,5 @@
 from structure import GameState
+from structure import GameData
 from structure.actions import ALL_ACTIONS
 import structure.ui as ui
 import game_loop
@@ -9,7 +10,8 @@ class StartGameMenu(ui.MenuItem):
         self._key = 'S'
         self._title = 'Start Game'
     
-    def start(self, data):
+    def start(self, data: GameData):
+        # TODO: Update with new GameState arguments when GameState has been updated
         state = GameState(data.players, ALL_ACTIONS, data.size, data.difficulty)
         game_loop.run(state)
         raise ui.MenuEvent(2)
