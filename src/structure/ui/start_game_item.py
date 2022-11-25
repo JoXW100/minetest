@@ -11,7 +11,7 @@ class StartGameMenu(ui.MenuItem):
         self._title = 'Start Game'
     
     def start(self, data: GameData):
-        # TODO: Update with new GameState arguments when GameState has been updated
-        state = GameState(data.players, ALL_ACTIONS, data.size, data.difficulty)
+        state = GameState(ALL_ACTIONS, data.size, data.mines)
         game_loop.run(state)
+        # Back to main menu
         raise ui.MenuEvent(2)

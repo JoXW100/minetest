@@ -60,8 +60,10 @@ class MenuItem(metaclass = ABCMeta):
                 else: # if did not break
                     print("Invalid option...\n")
             except ui.MenuEvent as err:
+                # Used to back multiple steps from the same event
                 if err.value > 1:
                     raise ui.MenuEvent(err.value - 1)
+                # Back to previous menu
                 return
             except EOFError:
                 print("Invalid option...\n")
