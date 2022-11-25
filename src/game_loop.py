@@ -12,7 +12,7 @@ def handle_victory(state: GameState) -> bool:
         return True
     if status is GameStatus.Won:
         clear_terminal()
-        print("You Won!")
+        print("You Won!\n\n")
     if status is GameStatus.Lost:
         clear_terminal()
         state.reveal_mines()
@@ -31,6 +31,7 @@ def run(state : GameState):
     while handle_victory(state):
         clear_terminal()
         state.print_board()
+        state.print_actions()
         with keyboard.Listener(on_press=on_press) as listener:
             # Block and listen for key press.
             keyboard.Listener.join(listener)

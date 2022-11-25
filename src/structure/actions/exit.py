@@ -8,7 +8,7 @@ class Exit(Action):
     """
     @staticmethod
     def get_name():
-        return "Exit"
+        return "[Q] Exit"
     
     @staticmethod
     def get_key() -> KeyCode:

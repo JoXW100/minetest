@@ -62,7 +62,7 @@ class BoardCell:
     def __str__(self) -> str:
         if self.mined and self.state is CellState.Visible:
             return MINE_TEXT
-        mined = len(self.__board.get_neighbors(self.location, lambda x: x.mined))
-        return str(mined) \
-            if mined > 0 and self.state is CellState.Visible \
-            else self.__state.value
+        num = len(self.__board.get_neighbors(self.location, lambda x: x.mined))
+        if num > 0 and self.state is CellState.Visible:
+            return str(num)
+        return self.__state.value

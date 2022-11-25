@@ -7,7 +7,7 @@ class Reveal(Action):
     """
     @staticmethod
     def get_name():
-        return "[d] Reveal cell"
+        return "[D] Reveal cell"
     
     @staticmethod
     def get_key() -> str:

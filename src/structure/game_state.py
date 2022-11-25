@@ -233,6 +233,18 @@ class GameState:
                 if cell.mined:
                     cell.set_state(st.CellState.Visible)
     
+    def print_actions(self):
+        text = ""
+        for action in self.actions:
+            text += action.get_name() + '\n'
+        print(text)
+        
+    def __cell_text(self, cell: st.BoardCell) -> str:
+        if cell.location == self.selection:
+            text = str(cell) if str(cell) != ' ' else '□'
+            return st.Color.colored_text(st.Color.GREEN, text)
+        return str(cell)
+    
     def print_board(self):
         size = self.board.size
         text = ""
@@ -244,8 +256,7 @@ class GameState:
             else:
                 text += ' │'
                 for cell in self.board.rows[y - 1]:
-                    text += ' ' + (st.Color.colored_text(st.Color.GREEN, str(cell)) \
-                        if cell.location == self.selection else str(cell)) 
+                    text += ' ' + self.__cell_text(cell)
                 text += ' │\n' 
         print(text)
         
