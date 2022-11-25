@@ -7,7 +7,7 @@ class Flag(Action):
     """
     @staticmethod
     def get_name():
-        return "[f] Flag cell"
+        return "[F] Flag cell"
     
     @staticmethod
     def get_key() -> str:
@@ -20,6 +20,7 @@ class Flag(Action):
             cell.set_state(CellState.Flagged)
         elif cell.state is CellState.Flagged:
             cell.set_state(CellState.Hidden)
+        return ActionOutcome.IGNORE
     
     @staticmethod
     def to_str():
