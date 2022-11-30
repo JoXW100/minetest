@@ -244,11 +244,14 @@ class GameState:
     def print_actions(self):
         text = ""
         for action in self.actions:
-            text += action.get_name() + '\n'
-        print(text)
+            # If the game is paused we only print actions that are allowed.
+            if not self.is_paused or action.allowed_in_pause:
+                text += action.get_name() + '\n'
         
         if self.is_paused:
-            print("Game is paused!")
+            text += "\nGame is paused!"
+
+        print(text)
         
     def __cell_text(self, cell: st.BoardCell) -> str:
         if cell.location == self.selection:
