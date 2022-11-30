@@ -23,12 +23,16 @@ class Player:
     
     def perform_turn(self, state: st.GameState, key: str) -> bool:
         action = state.get_action(key)
+
         if action is not None:
-            outcome = action.execute(state)
-            if outcome is st.ActionOutcome.SUCCEEDED:
-                state.next_round()
-            elif outcome is st.ActionOutcome.FAILED:
-                # Find better way, this is cleared instantly
-                print("Failed: " + action.to_str())
-            return True
+            # Only perform turn if the game is unpaused or the action is allowed
+            # in pause.
+            if not state.is_paused or action.allowed_in_pause:
+                outcome = action.execute(state)
+                if outcome is st.ActionOutcome.SUCCEEDED:
+                    state.next_round()
+                elif outcome is st.ActionOutcome.FAILED:
+                    # Find better way, this is cleared instantly
+                    print("Failed: " + action.to_str())
+                return True
         return False
