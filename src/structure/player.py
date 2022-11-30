@@ -1,6 +1,5 @@
 from __future__ import annotations
 import structure as st
-from .actions import TogglePause, Exit
 
 class Player:
     """
