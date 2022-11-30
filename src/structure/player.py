@@ -26,13 +26,9 @@ class Player:
         action = state.get_action(key)
 
         if action is not None:
-            # If the action toggles paused state, return immediately
-            if isinstance(action, TogglePause):
-                action.execute(state)
-                return True
-
-            # Only perform turn if the game is unpaused or if exiting the game
-            if not state.is_paused or isinstance(action, Exit):
+            # Only perform turn if the game is unpaused or the action is allowed
+            # in pause.
+            if not state.is_paused or action.allowed_in_pause:
                 outcome = action.execute(state)
                 if outcome is st.ActionOutcome.SUCCEEDED:
                     state.next_round()

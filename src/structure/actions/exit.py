@@ -23,3 +23,7 @@ class Exit(Action):
     @staticmethod
     def to_str():
         return "Exit game"
+
+    @property
+    def allowed_in_pause(self):
+        return True

@@ -18,8 +18,12 @@ class TogglePause(Action):
     @staticmethod
     def execute(state: GameState) -> ActionOutcome:
         state.toggle_pause()
-        return ActionOutcome.SUCCEEDED
+        return ActionOutcome.IGNORE
     
     @staticmethod
     def to_str():
         return "Pause/Unpause"
+
+    @property
+    def allowed_in_pause(self):
+        return True
