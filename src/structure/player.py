@@ -1,5 +1,6 @@
 from __future__ import annotations
 import structure as st
+from .actions import TogglePause, Exit
 
 class Player:
     """
@@ -23,12 +24,20 @@ class Player:
     
     def perform_turn(self, state: st.GameState, key: str) -> bool:
         action = state.get_action(key)
+
         if action is not None:
-            outcome = action.execute(state)
-            if outcome is st.ActionOutcome.SUCCEEDED:
-                state.next_round()
-            elif outcome is st.ActionOutcome.FAILED:
-                # Find better way, this is cleared instantly
-                print("Failed: " + action.to_str())
-            return True
+            # If the action toggles paused state, return immediately
+            if isinstance(action, TogglePause):
+                action.execute(state)
+                return True
+
+            # Only perform turn if the game is unpaused or if exiting the game
+            if not state.is_paused or isinstance(action, Exit):
+                outcome = action.execute(state)
+                if outcome is st.ActionOutcome.SUCCEEDED:
+                    state.next_round()
+                elif outcome is st.ActionOutcome.FAILED:
+                    # Find better way, this is cleared instantly
+                    print("Failed: " + action.to_str())
+                return True
         return False
