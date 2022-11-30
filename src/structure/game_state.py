@@ -243,13 +243,14 @@ class GameState:
     
     def print_actions(self):
         text = ""
+
+        if self.is_paused:
+            text += "Game is paused!\n\n"
+
         for action in self.actions:
             # If the game is paused we only print actions that are allowed.
             if not self.is_paused or action.allowed_in_pause:
                 text += action.get_name() + '\n'
-        
-        if self.is_paused:
-            text += "\nGame is paused!"
 
         print(text)
         
