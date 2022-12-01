@@ -241,6 +241,12 @@ class GameState:
                 if cell.mined:
                     cell.set_state(st.CellState.Visible)
     
+    def set_flag_on_mines(self):
+        for row in self.board.rows:
+            for cell in row:
+                if cell.mined:
+                    cell.set_state(st.CellState.Flagged)
+    
     def print_actions(self):
         text = ""
 
