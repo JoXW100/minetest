@@ -13,3 +13,7 @@
 - The `owner` value of a piece on the board is the value of the `identifier` of the owning player.
 
 If any of the values are out of bounds or invalid, the file may be interpreted as best it can (by defaulting to some value) or not loaded at all.
+
+## Tests
+
+Tests can be run by using `python -m unittests`. This will automatically find and run all defined tests. Individual test files can be run `python -m unittest tests/test_*.py`. The `-v` flag can be added to see verbose output of all tests run.
