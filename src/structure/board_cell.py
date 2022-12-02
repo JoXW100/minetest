@@ -65,4 +65,6 @@ class BoardCell:
         num = len(self.__board.get_neighbors(self.location, lambda x: x.mined))
         if num > 0 and self.state is CellState.Visible:
             return str(num)
+        if self.state is CellState.Flagged:
+            return st.Color.colored_text(st.Color.YELLOW, self.__state.value)
         return self.__state.value

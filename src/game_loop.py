@@ -12,12 +12,17 @@ def handle_victory(state: GameState) -> bool:
         return True
     if status is GameStatus.Won:
         clear_terminal()
+        state.set_flag_on_mines()
+        state.print_board()
         print("You Won!\n\n")
+        input("Press enter to continue...")
     if status is GameStatus.Lost:
         clear_terminal()
         state.reveal_mines()
         state.print_board()
-        print()
+        print("You revelead a mine, you lost.\n\n")
+        input("Press enter to continue...")
+            
     return False
 
 # use for debug and testing

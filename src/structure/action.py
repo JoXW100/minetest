@@ -83,5 +83,17 @@ class Action(metaclass = ABCMeta):
             The descriptive text of the action
         """
         raise NotImplementedError
-        
+
+    @property
+    def allowed_in_pause(self) -> bool:
+        """
+        Returns True if the action is allowed when the game is paused and False
+        if not
+
+        Returns
+        -------
+        allowed : bool
+            If the action is allowed when the game is paused
+        """
+        return False
     

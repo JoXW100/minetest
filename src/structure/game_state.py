@@ -57,6 +57,7 @@ class GameState:
         self.__actions = actions
         self.__selection = st.Location(0, 0)
         self.__round = round
+        self.__paused = False
 
     @property
     def player(self) -> st.Player:
@@ -93,6 +94,13 @@ class GameState:
         Decrements the round counter
         """
         self.__round -= 1
+
+    @property
+    def is_paused(self) -> bool:
+        return self.__paused
+    
+    def toggle_pause(self):
+        self.__paused = not self.__paused
 
     def navigate(self, dir: Direction):
         """
@@ -233,10 +241,23 @@ class GameState:
                 if cell.mined:
                     cell.set_state(st.CellState.Visible)
     
+    def set_flag_on_mines(self):
+        for row in self.board.rows:
+            for cell in row:
+                if cell.mined:
+                    cell.set_state(st.CellState.Flagged)
+    
     def print_actions(self):
         text = ""
+
+        if self.is_paused:
+            text += "Game is paused!\n\n"
+
         for action in self.actions:
-            text += action.get_name() + '\n'
+            # If the game is paused we only print actions that are allowed.
+            if not self.is_paused or action.allowed_in_pause:
+                text += action.get_name() + '\n'
+
         print(text)
         
     def __cell_text(self, cell: st.BoardCell) -> str:
