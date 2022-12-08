@@ -1,5 +1,7 @@
 import unittest as ut
 import structure.ui as ui
+from structure import *
+from structure.actions import *
 
 
 class TestGameRules(ut.TestCase):
@@ -45,4 +47,45 @@ class TestGameRules(ut.TestCase):
         self.assertTrue(contains_easy)
         self.assertTrue(contains_medium)
         self.assertTrue(contains_hard)
+    
+    # T-INT1-1
+    def test_navigation_action(self):
+        gs = GameState(ALL_ACTIONS, 4) # 4 is the board size, and can be changed (>1)
+        lim = gs.board.size - 1
+        assert(lim > 0)
+        self.assertEquals(gs.selection, Location(0,0))
+        # Cannot move left here, selection not altered
+        NavigateLeft.execute(gs)
+        self.assertEquals(gs.selection, Location(0,0))
+        # move all the way to the top right
+        for i in range(1, gs.board.size):
+            NavigateRight.execute(gs)
+            self.assertEquals(gs.selection, Location(i,0))
+            
+        # Cannot move up here, selection not altered
+        NavigateUp.execute(gs)
+        self.assertEquals(gs.selection, Location(lim,0))
+        # move all the way to the bottom right
+        for i in range(1, gs.board.size):
+            NavigateDown.execute(gs)
+            self.assertEquals(gs.selection, Location(lim,i))
+            
+        # Cannot move right here, selection not altered
+        NavigateRight.execute(gs)
+        self.assertEquals(gs.selection, Location(lim,lim))
+        # move all the way to the bottom left
+        for i in range(1, gs.board.size):
+            NavigateLeft.execute(gs)
+            self.assertEquals(gs.selection, Location(lim-i,lim))
+        
+        # Cannot move down here, selection not altered
+        NavigateDown.execute(gs)
+        self.assertEquals(gs.selection, Location(0,lim))
+        # move all the way to the top left
+        for i in range(1, gs.board.size):
+            NavigateUp.execute(gs)
+            self.assertEquals(gs.selection, Location(0,lim-i))
+        # back at 0,0 
+        self.assertEquals(gs.selection, Location(0,0))
+            
         
