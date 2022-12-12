@@ -83,6 +83,10 @@ class GameState:
     def selection(self) -> st.Location:
         return self.__selection
     
+    @property
+    def is_paused(self) -> bool:
+        return self.__paused
+    
     def next_round(self):
         """
         Increments the round counter
@@ -95,9 +99,11 @@ class GameState:
         """
         self.__round -= 1
 
-    @property
-    def is_paused(self) -> bool:
-        return self.__paused
+    def set_selection(self, loc: st.Location) -> bool:
+        if loc.validate(self.board.size):
+            self.__selection = loc
+            return True
+        return False
     
     def toggle_pause(self):
         self.__paused = not self.__paused
@@ -111,7 +117,7 @@ class GameState:
         dir : Direction 
             The direction to move
         """
-        res = None
+        res = self.selection
         if dir is Direction.Up:
             res = st.Location(self.selection.x, self.selection.y - 1)
         elif dir is Direction.Right:

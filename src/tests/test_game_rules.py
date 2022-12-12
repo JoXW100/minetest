@@ -1,5 +1,7 @@
 import unittest as ut
 import structure.ui as ui
+from structure import *
+from structure.actions import *
 
 
 class TestGameRules(ut.TestCase):
@@ -45,4 +47,38 @@ class TestGameRules(ut.TestCase):
         self.assertTrue(contains_easy)
         self.assertTrue(contains_medium)
         self.assertTrue(contains_hard)
+    
+    # T-INT2-1 
+    def test_flag_on_hidden_cell(self):
+        gs = GameState(ALL_ACTIONS, 4, 0)
+        cell = gs.board.select(Location(0,0))
+        cell.set_mined()
+        gs.reveal_cell(Location(2,2))
+        self.assertTrue(gs.set_selection(Location(0,0)))
+        self.assertEqual(cell.state, CellState.Hidden)
+        Flag.execute(gs)
+        self.assertEqual(cell.state, CellState.Flagged)
         
+    # T-INT2-2 
+    def test_flag_on_flagged_cell(self):
+        gs = GameState(ALL_ACTIONS, 4, 0)
+        cell = gs.board.select(Location(0,0))
+        cell.set_mined()
+        cell.set_state(CellState.Flagged)
+        gs.reveal_cell(Location(2,2))
+        self.assertTrue(gs.set_selection(Location(0,0)))
+        self.assertEqual(cell.state, CellState.Flagged)
+        Flag.execute(gs)
+        self.assertEqual(cell.state, CellState.Hidden)
+        
+             
+    # T-INT2-3 
+    def test_flag_on_revealed_cell(self):
+        gs = GameState(ALL_ACTIONS, 4, 0)
+        gs.board.select(Location(0,0)).set_mined()
+        gs.reveal_cell(Location(2,2))
+        cell = gs.board.select(Location(2,2))
+        self.assertTrue(gs.set_selection(Location(2,2)))
+        self.assertEqual(cell.state, CellState.Visible)
+        Flag.execute(gs)
+        self.assertEqual(cell.state, CellState.Visible)
