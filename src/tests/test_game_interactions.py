@@ -1,5 +1,5 @@
 import unittest as ut
 
-class TestInteractions(ut.TestCase):
+class TestInteractions():
     def test_template(self):
         self.assertTrue(True)
