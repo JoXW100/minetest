@@ -363,10 +363,10 @@ class GameState:
         """
         # Get size of the terminal window.
         (_, t_lines) = os.get_terminal_size()
-        board_print_size = self.board.size + 2
+        board_print_size = self.board.size + 1
 
-        # The extra "magic" numbers below account for the border around the
-        # game board (1 line above, 1 below) and a blank line below each segment
+        # The extra "magic" numbers below account for blank lines below each
+        # segment
         if (board_print_size + 1 + len(self.actions) + 1) > t_lines:
             # Check if we are able to either print all actions or that the total
             # print board size fits on the window.
