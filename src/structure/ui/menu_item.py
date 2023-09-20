@@ -5,7 +5,7 @@ import structure.ui as ui
 
 class MenuItem(metaclass = ABCMeta):
     """
-    The base menu object handles transitions between menus and keeps a 
+    The base menu object, handles transitions between menus and keeps a 
     persistent data object to store menu choices.
     """
     
