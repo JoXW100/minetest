@@ -115,7 +115,7 @@ class GameState:
         Attributes
         ----------
         dir : Direction 
-            The direction to move
+            The direction to move the selection in
         """
         res = self.selection
         if dir is Direction.Up:
@@ -130,17 +130,23 @@ class GameState:
             self.__selection = res
             
     def __inner_reveal(self, cell: st.BoardCell):
+        """
+        This method is used by the :func:`reveal_cell` method on a cell not containing
+        a mine to recursively reveal that cell's neighbors that also do not
+        contain any mines.
+        """
+
         # Keep track of iterated cells to avoid visiting the same cell multiple 
-        # times and getting stuck in a loop
+        # times and getting stuck in a loop.
         visited = {cell.location}
         # The pending cells to visit & reveal
         stack = deque([cell])
         while len(stack) > 0:
-            # reveal the cell first in the stack
+            # Reveal the first cell in the stack
             cell = stack.pop()
             cell.set_state(st.CellState.Visible)
             neighbors = self.board.get_neighbors(cell.location)
-            # If no neighboring cell is mined, reveal them.
+            # If no neighboring cell is mined, reveal them
             if all(not cell.mined for cell in neighbors):
                 for cell in neighbors:
                     if cell.location not in visited:
@@ -242,18 +248,28 @@ class GameState:
         return status
     
     def reveal_mines(self):
+        """
+        Reveals all the mines on the board by setting their state to visible.
+        """
         for row in self.board.rows:
             for cell in row:
                 if cell.mined:
                     cell.set_state(st.CellState.Visible)
     
     def set_flag_on_mines(self):
+        """
+        Sets all the mines on the board to be flagged.
+        """
         for row in self.board.rows:
             for cell in row:
                 if cell.mined:
                     cell.set_state(st.CellState.Flagged)
     
     def print_actions(self):
+        """
+        Prints all the possible actions available to the user at the current
+        time.
+        """
         text = ""
 
         if self.is_paused:

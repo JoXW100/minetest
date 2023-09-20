@@ -12,7 +12,7 @@ class ActionOutcome(Enum):
 # Abstract singleton with static methods
 class Action(metaclass = ABCMeta):
     """
-    Represent an executable action
+    Represent an executable action in the game.
     """
     
     _instances = {}

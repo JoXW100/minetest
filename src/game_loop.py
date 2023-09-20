@@ -4,9 +4,31 @@ from pynput import keyboard
 import os
 
 def clear_terminal():
-    os.system('cls' if os.name == 'nt' else 'clear')
+    """
+    Clears the terminal screen.
 
-def handle_victory(state: GameState) -> bool:
+    Uses 'cls' on Windows and 'clear' on other platforms.
+    """
+    if os.name == 'nt':  # Check if the operating system is Windows
+        os.system('cls')
+    else:
+        os.system('clear')
+
+def handle_game_state(state: GameState) -> bool:
+    """
+    Checks whether the game should continue or not. If not, the player has
+    won/lost the game and an end screen is shown.
+    
+    Attributes
+    ----------
+    state : GameState
+        The current state of the game.
+    
+    Returns
+    -------
+    should_continue : bool
+        True if the game should continue, false if not.
+    """
     status = state.get_game_status()
     if status is GameStatus.Playing:
         return True
@@ -25,22 +47,28 @@ def handle_victory(state: GameState) -> bool:
             
     return False
 
-# use for debug and testing
+# Used for debug and testing
 global listener
 
 def run(state : GameState):
+    """
+    Game loop that runs the game. Prints the board, prints possible actions and
+    listens for input from the user.
+    
+    Attributes
+    ----------
+    state : GameState
+        The current state of the game.
+    """
     def on_press(key):
         res = state.player.perform_turn(state, key)
         return not res
     
-    while handle_victory(state):
+    # Keep looping while the player has not won/lost yet.
+    while handle_game_state(state):
         clear_terminal()
         state.print_board()
         state.print_actions()
         with keyboard.Listener(on_press=on_press) as listener:
             # Block and listen for key press.
             keyboard.Listener.join(listener)
-
-if __name__ == "__main__":
-    gs = GameState(ALL_ACTIONS, 5, 8)
-    run(gs)
