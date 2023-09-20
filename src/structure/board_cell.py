@@ -3,10 +3,11 @@ from enum import Enum
 import structure as st
 
 class CellState(Enum):
+    """Class representing cell states"""
     Visible = ' '
     Hidden  = '■'
     Flagged = '⚑'
-    
+
 MINE_TEXT:str = st.Color.colored_text(st.Color.RED, '○')
 
 class BoardCell:

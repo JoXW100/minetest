@@ -32,6 +32,20 @@ class Color:
     
     @staticmethod
     def colored_text(color: str, text: str) -> str:
+        """
+        Prepares an input string for colored terminal printing
+
+        Attributes
+        ----------
+        color : str
+            The color to print the text in
+        text : str
+            The text to print in color
+        Returns
+        -------
+        output : str
+            Colored text output ready to be printed
+        """
         return color + text + Color.WHITE
     
     @staticmethod
@@ -42,9 +56,9 @@ class Color:
         Attributes
         ----------
         color : str
-            the color to print the text in
+            The color to print the text in
         text : str
-            the text to print in color
+            The text to print in color
         """
         print(Color.colored_text(color, text))
     

@@ -10,18 +10,33 @@ class Player:
     
     Methods
     -------
-    perform_turn(state : GameState) -> None
+    perform_turn(state : GameState) -> bool
         Performs a player turn
     """
-    
+
     # Singleton
     _instances = {}
-    def __call__(cls, *args, **kwargs):
+    def __call__(self, cls, *args, **kwargs):
         if cls not in cls._instances:
             cls._instances[cls] = super(cls).__call__(*args, **kwargs)
         return cls._instances[cls]
-    
+
     def perform_turn(self, state: st.GameState, key: str) -> bool:
+        """
+        Performs a player turn given a character representing the action to be
+        taken.
+        
+        Attributes
+        ----------
+        state : GameState
+            The current state of the game
+        key : str
+            The key (character) corresponding to the action to be played
+        Returns
+        -------
+        success : bool
+           If the action was performed successfully or not
+        """
         action = state.get_action(key)
 
         if action is not None:

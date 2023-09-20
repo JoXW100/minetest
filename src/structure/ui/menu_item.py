@@ -5,7 +5,7 @@ import structure.ui as ui
 
 class MenuItem(metaclass = ABCMeta):
     """
-    The base menu object, handled transitions between menus and keeps a 
+    The base menu object, handles transitions between menus and keeps a 
     persistent data object to store menu choices.
     """
     
@@ -38,7 +38,7 @@ class MenuItem(metaclass = ABCMeta):
     def start(self, data: GameData) -> bool:
         """
         Used to set the initial menu item from values in the game state,
-        returns true if the regular open shall be called.
+        returns true if the regular open shall be called
         """
         return True
     

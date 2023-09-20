@@ -1,5 +1,5 @@
-from structure import Action, GameState, ActionOutcome, Direction
 from pynput.keyboard import Key, KeyCode
+from structure import Action, GameState, ActionOutcome, Direction
 
 class NavigateUp(Action):
     """
