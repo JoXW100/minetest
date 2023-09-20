@@ -1,4 +1,5 @@
 from __future__ import annotations
+import os
 from enum import Enum
 from collections import deque
 from random import randint
@@ -282,22 +283,35 @@ class GameState:
                 if cell.mined:
                     cell.set_state(st.CellState.Flagged)
     
+    def __get_print_actions_strings(self) -> [str]:
+        """
+        Collects the strings for all possible actions into a list for printing
+
+        Returns
+        -------
+        action_strings : [str] 
+            A list of all possible actions to play given the current game state
+        """
+        strings = []
+
+        if self.is_paused:
+            strings.append("Game is paused!")
+
+        for action in self.actions:
+            # If the game is paused we only add actions that are allowed to be
+            # performed when paused
+            if not self.is_paused or action.allowed_in_pause:
+                strings.append(action.get_name())
+
+        return strings
+    
     def print_actions(self):
         """
         Prints all the possible actions available to the user at the current
-        time.
+        time
         """
-        text = ""
-
-        if self.is_paused:
-            text += "Game is paused!\n\n"
-
-        for action in self.actions:
-            # If the game is paused we only print actions that are allowed.
-            if not self.is_paused or action.allowed_in_pause:
-                text += action.get_name() + '\n'
-
-        print(text)
+        for action_str in self.__get_print_actions_strings():
+            print(action_str)
         
     def __cell_text(self, cell: st.BoardCell) -> str:
         if cell.location == self.selection:
@@ -305,23 +319,78 @@ class GameState:
             return st.Color.colored_text(st.Color.GREEN, text)
         return str(cell)
     
-    def print_board(self):
+    def print_board(self, and_actions=False):
         """
         Prints the board to the terminal
+
+        Attributes
+        ----------
+        and_actions : Bool
+            If the actions should be printed alongside the board
         """
         size = self.board.size
+        print_range = size + 2
+        action_strings = self.__get_print_actions_strings()
         text = ""
-        for y in range(size + 2):
+
+        # Pad actions list to print range for printing. The first None enables
+        # us to skip printing on the first line of the board.
+        padded_action_strings = [None] + action_strings + \
+            ([None] * (print_range - len(action_strings)))
+
+        for (y, action_str) in zip(range(print_range), padded_action_strings):
             if y == 0:
-                text += ' ┌─' +  '──' * (size - 1) + '──┐\n'
+                text += ' ┌─' +  '──' * (size - 1) + '──┐'
             elif y == (size + 1):
-                text += ' └─' +  '──' * (size - 1) + '──┘\n'
+                text += ' └─' +  '──' * (size - 1) + '──┘'
             else:
                 text += ' │'
                 for cell in self.board.rows[y - 1]:
                     text += ' ' + self.__cell_text(cell)
-                text += ' │\n' 
-        print(text)
+                text += ' │'
+            
+            # Add action to the end of the line if printing them
+            if and_actions and (action_str is not None and y != 0):
+                text += " " + action_str
+
+            text += "\n"
+
+        print(text, end="")
+
+    def print_board_and_actions(self):
+        """
+        Prints the board and all possible actions to the terminal
+        """
+        # Get size of the terminal window.
+        (_, t_lines) = os.get_terminal_size()
+        board_print_size = self.board.size + 2
+
+        # The extra "magic" numbers below account for the border around the
+        # game board (1 line above, 1 below) and a blank line below each segment
+        if (board_print_size + 1 + len(self.actions) + 1) > t_lines:
+            # Check if we are able to either print all actions or that the total
+            # print board size fits on the window.
+            if len(self.actions) < board_print_size <= t_lines:
+                self.print_board(and_actions=True)
+            else:
+                # Find exit action key and print error message
+                exit_action_key = None
+                for action in self.actions:
+                    if "exit" in action.get_name().lower():
+                        exit_action_key = str(action.get_key())
+
+                output_str = "Terminal too small. Resize and refresh by" + \
+                    "pressing a key"
+
+                if exit_action_key is not None:
+                    output_str += f"or exit by pressing [{exit_action_key}]"
+
+                print(output_str)
+
+        else:
+            self.print_board()
+            self.print_actions()
+
         
     def get_action(self, key: str) -> st.Action|None:
         """

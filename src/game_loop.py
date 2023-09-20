@@ -67,8 +67,7 @@ def run(state : GameState):
     # Keep looping while the player has not won/lost yet.
     while handle_game_state(state):
         clear_terminal()
-        state.print_board()
-        state.print_actions()
+        state.print_board_and_actions()
         with keyboard.Listener(on_press=on_press) as listener:
             # Block and listen for key press.
             keyboard.Listener.join(listener)
