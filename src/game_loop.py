@@ -1,7 +1,7 @@
+import os
+from pynput import keyboard
 from structure import GameState, GameStatus
 from structure.actions import ALL_ACTIONS
-from pynput import keyboard
-import os
 
 def clear_terminal():
     """

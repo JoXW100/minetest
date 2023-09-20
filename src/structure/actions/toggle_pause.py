@@ -1,6 +1,5 @@
+from pynput.keyboard import KeyCode
 from structure import Action, GameState, ActionOutcome
-from pynput.keyboard import Key, KeyCode
-import os
 
 class TogglePause(Action):
     """

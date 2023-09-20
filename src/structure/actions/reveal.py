@@ -1,5 +1,5 @@
-from structure import Action, GameState, ActionOutcome
 from pynput.keyboard import KeyCode
+from structure import Action, GameState, ActionOutcome
 
 class Reveal(Action):
     """

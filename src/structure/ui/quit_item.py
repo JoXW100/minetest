@@ -1,5 +1,5 @@
-import structure.ui as ui
 import sys
+import structure.ui as ui
    
 class QuitItem(ui.MenuItem):
     def __init__(self):

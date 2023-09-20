@@ -1,5 +1,5 @@
-from structure import Action, GameState, ActionOutcome, CellState
 from pynput.keyboard import KeyCode
+from structure import Action, GameState, ActionOutcome, CellState
 
 class Flag(Action):
     """
