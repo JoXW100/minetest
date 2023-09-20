@@ -5,12 +5,14 @@ from random import randint
 import structure as st
 
 class Direction(Enum):
+    """Class representing directions"""
     Up = 0
     Right = 1
     Down = 2
     Left = 3
 
 class GameStatus(Enum):
+    """Class representing game states"""
     Won = 0
     Lost = 1
     Playing = 2
@@ -100,12 +102,27 @@ class GameState:
         self.__round -= 1
 
     def set_selection(self, loc: st.Location) -> bool:
+        """
+        Move the current selection on the board to a new location
+        
+        Attributes
+        ----------
+        loc : st.Location
+            The new location to move the selection to
+        Returns
+        -------
+        successful : bool
+            If the move was successful or not
+        """
         if loc.validate(self.board.size):
             self.__selection = loc
             return True
         return False
     
     def toggle_pause(self):
+        """
+        Toggles the paused state of the game
+        """
         self.__paused = not self.__paused
 
     def navigate(self, dir: Direction):
@@ -289,6 +306,9 @@ class GameState:
         return str(cell)
     
     def print_board(self):
+        """
+        Prints the board to the terminal
+        """
         size = self.board.size
         text = ""
         for y in range(size + 2):
@@ -303,7 +323,19 @@ class GameState:
                 text += ' │\n' 
         print(text)
         
-    def get_action(self, key) -> st.Action|None:
+    def get_action(self, key: str) -> st.Action|None:
+        """
+        Gets the action corresponding to character representing a key press.
+        
+        Attributes
+        ----------
+        key : str
+            The key (character) corresponding to the action to be played
+        Returns
+        -------
+        action : st.Action|None
+           Returns the corresponding action if there is one, otherwise None
+        """
         for action in self.actions:
             if action.get_key() == key:
                 return action
