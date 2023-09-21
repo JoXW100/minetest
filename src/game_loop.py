@@ -74,7 +74,7 @@ def run(state : GameState):
 
         if input_mode == 'native':
             # Get input from the user.
-            key_str = input("Enter action: ")
+            key_str = input("Enter action: ").lower()
             # Perform the action.
             on_press(translate_key(key_str))
         else:
