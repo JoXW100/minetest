@@ -1,5 +1,6 @@
 from pynput.keyboard import Key, KeyCode
 from structure import Action, GameState, ActionOutcome, Direction
+import os
 
 class NavigateUp(Action):
     """
@@ -7,7 +8,7 @@ class NavigateUp(Action):
     """
     @staticmethod
     def get_name():
-        return "[↑] Navigate up"
+        return f"[{'I' if os.environ['INPUT_MODE'] == 'native' else '↑'}] Navigate up"
     
     @staticmethod
     def get_key() -> str:
@@ -28,7 +29,7 @@ class NavigateRight(Action):
     """
     @staticmethod
     def get_name():
-        return "[→] Navigate right"
+        return f"[{'L' if os.environ['INPUT_MODE'] == 'native' else '→'}] Navigate right"
     
     @staticmethod
     def get_key() -> str:
@@ -49,7 +50,7 @@ class NavigateDown(Action):
     """
     @staticmethod
     def get_name():
-        return "[↓] Navigate down"
+        return f"[{'K' if os.environ['INPUT_MODE'] == 'native' else '↓'}] Navigate down"
     
     @staticmethod
     def get_key() -> str:
@@ -70,7 +71,7 @@ class NavigateLeft(Action):
     """
     @staticmethod
     def get_name():
-        return "[←] Navigate left"
+        return f"[{'J' if os.environ['INPUT_MODE'] == 'native' else '←'}] Navigate left"
     
     @staticmethod
     def get_key() -> KeyCode:
