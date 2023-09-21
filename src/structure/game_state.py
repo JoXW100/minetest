@@ -4,6 +4,7 @@ from enum import Enum
 from collections import deque
 from random import randint
 import structure as st
+from utils import pad_list
 
 class PrintConfig(Enum):
     """Class representing board and actions printing configuration"""
@@ -339,10 +340,8 @@ class GameState:
         action_strings = self.__get_print_actions_strings()
         text = ""
 
-        # Pad actions list to print range for printing. The first None enables
-        # us to skip printing on the first line of the board.
-        padded_action_strings = [None] + action_strings + \
-            ([None] * (print_range - len(action_strings)))
+        padded_action_strings = pad_list(
+            action_strings, None, 1, (print_range - len(action_strings)))
 
         for (y, action_str) in zip(range(print_range), padded_action_strings):
             if y == 0:
@@ -375,7 +374,7 @@ class GameState:
                 exit_action_key = str(action.get_key())
 
         text = "Terminal too small. Resize and refresh by" + \
-            "pressing a key"
+            " pressing a key"
 
         if exit_action_key is not None:
             text += f" or exit by pressing [{exit_action_key}]"
@@ -395,10 +394,9 @@ class GameState:
         # Get size of the terminal window.
         (_, t_lines) = os.get_terminal_size()
         board_print_size = self.board.size + 1
+        blank_lines = 2 # One blank lines below the board and one below actions
 
-        # The extra "magic" numbers below account for blank lines below each
-        # segment
-        if (board_print_size + 1 + len(self.actions) + 1) > t_lines:
+        if (board_print_size + len(self.actions) + blank_lines) > t_lines:
             # Check if we are able to either print all actions or that the total
             # print board size fits on the window.
             if len(self.actions) < board_print_size <= t_lines:
