@@ -5,6 +5,12 @@ from collections import deque
 from random import randint
 import structure as st
 
+class PrintConfig(Enum):
+    """Class representing board and actions printing configuration"""
+    Vertical = 0
+    Horizontal = 1
+    NoneFits = 2
+
 class Direction(Enum):
     """Class representing directions"""
     Up = 0
@@ -318,8 +324,8 @@ class GameState:
             text = str(cell) if str(cell) != ' ' else '□'
             return st.Color.colored_text(st.Color.GREEN, text)
         return str(cell)
-    
-    def print_board(self, and_actions=False):
+
+    def print_board(self, print_actions = False):
         """
         Prints the board to the terminal
 
@@ -348,18 +354,43 @@ class GameState:
                 for cell in self.board.rows[y - 1]:
                     text += ' ' + self.__cell_text(cell)
                 text += ' │'
-            
+
             # Add action to the end of the line if printing them
-            if and_actions and (action_str is not None and y != 0):
+            if print_actions and (action_str is not None and y != 0):
                 text += " " + action_str
 
             text += "\n"
 
-        print(text, end="")
+        print(text, end = "")
 
-    def print_board_and_actions(self):
+    def print_resize_prompt(self):
         """
-        Prints the board and all possible actions to the terminal
+        Prints a resize prompt for when the board and actions cannot be printed
+        legibly
+        """
+        # Find exit action key and print error message
+        exit_action_key = None
+        for action in self.actions:
+            if "exit" in action.get_name().lower():
+                exit_action_key = str(action.get_key())
+
+        text = "Terminal too small. Resize and refresh by" + \
+            "pressing a key"
+
+        if exit_action_key is not None:
+            text += f" or exit by pressing [{exit_action_key}]"
+
+        print(text)
+
+    def __get_suitable_print_config(self) -> PrintConfig:
+        """
+        Returns the most suitable print configuration depending on the size of
+        the terminal
+
+        Returns
+        -------
+        configuration : PrintConfig
+           The most suitable print configuration
         """
         # Get size of the terminal window.
         (_, t_lines) = os.get_terminal_size()
@@ -371,27 +402,27 @@ class GameState:
             # Check if we are able to either print all actions or that the total
             # print board size fits on the window.
             if len(self.actions) < board_print_size <= t_lines:
-                self.print_board(and_actions=True)
-            else:
-                # Find exit action key and print error message
-                exit_action_key = None
-                for action in self.actions:
-                    if "exit" in action.get_name().lower():
-                        exit_action_key = str(action.get_key())
+                return PrintConfig.Horizontal
 
-                output_str = "Terminal too small. Resize and refresh by" + \
-                    "pressing a key"
-
-                if exit_action_key is not None:
-                    output_str += f"or exit by pressing [{exit_action_key}]"
-
-                print(output_str)
-
+            return PrintConfig.NoneFits
         else:
+            return PrintConfig.Vertical
+
+
+    def print_board_and_actions(self):
+        """
+        Prints the board and all possible actions to the terminal
+        """
+        print_config = self.__get_suitable_print_config()
+
+        if print_config == PrintConfig.Vertical:
             self.print_board()
             self.print_actions()
+        elif print_config == PrintConfig.Horizontal:
+            self.print_board(print_actions = True)
+        elif print_config == PrintConfig.NoneFits:
+            self.print_resize_prompt()
 
-        
     def get_action(self, key: str) -> st.Action|None:
         """
         Gets the action corresponding to character representing a key press.
