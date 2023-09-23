@@ -2,7 +2,7 @@ import os
 from pynput import keyboard
 from structure import GameState, GameStatus
 from structure.actions import ALL_ACTIONS
-from translate_pynput import translate_key
+from utils import translate_key
 
 def clear_terminal():
     """
