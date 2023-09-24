@@ -2,6 +2,7 @@ import os
 from pynput import keyboard
 from structure import GameState, GameStatus
 from structure.actions import ALL_ACTIONS
+from utils import translate_key
 
 def clear_terminal():
     """
@@ -64,10 +65,21 @@ def run(state : GameState):
         res = state.player.perform_turn(state, key)
         return not res
     
+    # Get the input mode from the environment variables.
+    input_mode = os.environ['INPUT_MODE']
+
     # Keep looping while the player has not won/lost yet.
     while handle_game_state(state):
         clear_terminal()
         state.print_board_and_actions()
-        with keyboard.Listener(on_press=on_press) as listener:
-            # Block and listen for key press.
-            keyboard.Listener.join(listener)
+
+        if input_mode == 'native':
+            # Get input from the user.
+            key_str = input("Enter action: ").lower()
+            # Perform the action.
+            on_press(translate_key(key_str))
+        else:
+            with keyboard.Listener(on_press=on_press) as listener:
+                # Block and listen for key press.
+                keyboard.Listener.join(listener)
+            
