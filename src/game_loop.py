@@ -65,6 +65,7 @@ def run(state : GameState):
         res = state.player.perform_turn(state, key)
         return not res
     
+    # Get the input mode from the environment variables.
     input_mode = os.environ['INPUT_MODE']
 
     # Keep looping while the player has not won/lost yet.

@@ -20,8 +20,10 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
-    seed = args.seed
+    # Set the input mode to use in the game loop.
     os.environ['INPUT_MODE'] = args.input
+    # Set the seed if given.
+    seed = args.seed
     if (seed is not None):
         random.seed(seed)
     MainMenu().open()
