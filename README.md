@@ -2,7 +2,10 @@
 A simple minesweeper game developed in python.
 
 ## Dependencies
-- pynput
+Install dependencies by running
+```
+pip install -r requirements.txt
+```
 
 ## Usage
 - Run using `python .\src\game.py`
