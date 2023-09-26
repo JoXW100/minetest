@@ -61,6 +61,7 @@ class GameState:
     PLAYING = -1
     
     def __init__(self, actions: list[st.Action], size: int = 5, mines: int = 0, round: int = 0):
+        self.__color_scheme = st.ColorScheme()
         self.__board = st.Board(size)
         self.__player = st.Player()
         self.__mines = mines
@@ -321,10 +322,15 @@ class GameState:
             print(action_str)
         
     def __cell_text(self, cell: st.BoardCell) -> str:
+        cell_str = str(cell)
+
+        # Replace color with selected color if the cell is selected.
         if cell.location == self.selection:
-            text = str(cell) if str(cell) != ' ' else '□'
-            return st.Color.colored_text(st.Color.GREEN, text)
-        return str(cell)
+            text = cell_str if cell_str != ' ' else '□'
+            text = st.Color.remove_color(text)
+            return st.Color.colored_text(self.__color_scheme.get_color("selected"), text)
+
+        return cell_str
 
     def print_board(self, print_actions = False):
         """
