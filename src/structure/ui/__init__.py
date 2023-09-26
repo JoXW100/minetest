@@ -8,4 +8,6 @@ from .board_size_menu import BoardSizeMenu
 from .mine_count_menu import MineCountMenu
 from .new_custom_game_menu import NewCustomGameMenu
 from .new_standard_game_menu import NewStandardGameMenu
+from .change_color_scheme import ChangeColorScheme
+from .cycle_color_scheme import CycleColorScheme
 from .start_game_item import StartGameMenu

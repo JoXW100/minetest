@@ -6,8 +6,9 @@ class MainMenu(ui.MenuItem):
         super().__init__()
         self._title = 'Main Menu'
         self._options = [
-            ui.NewStandardGameMenu(), 
-            ui.NewCustomGameMenu(), 
+            ui.NewStandardGameMenu(),
+            ui.NewCustomGameMenu(),
+            ui.ChangeColorScheme(),
             ui.QuitItem()
         ]
     

@@ -23,7 +23,7 @@ class ColorScheme:
             cls._instance = super(ColorScheme, cls).__new__(cls)
 
             color_map = st.Color.color_map
-            cls._instance.presets = {
+            cls._instance._presets = {
                 'default': {
                     'flag': color_map["red"],
                     'number_1': color_map["blue"],
@@ -51,7 +51,7 @@ class ColorScheme:
                     'selected': color_map["green"],
                 }
             }
-            cls._instance.current_scheme = "default"
+            cls._instance._current_scheme = "default"
 
         return cls._instance
 
@@ -66,19 +66,39 @@ class ColorScheme:
         scheme_name: str
             The name of the color scheme to set
         """
-        if scheme_name in self.presets:
-            self.current_scheme = scheme_name
+        if scheme_name in self._presets:
+            self._current_scheme = scheme_name
+    
+    def cycle_color_scheme(self):
+        """
+        Sets the current color scheme to the next one in the presets list.
+        Useful for cycling color schemes in a menu.
+        """
+        presets = list(self._presets.keys())
+        self._current_scheme = presets[(presets.index(
+            self._current_scheme) + 1) % len(presets)]
+
+    def get_current_scheme(self) -> str:
+        """
+        Retrieves the currently selected color scheme
+
+        Returns
+        -------
+        scheme_name: str
+            The name of the color scheme to set
+        """
+        return self._current_scheme
 
     def get_color_schemes(self) -> [str]:
         """
         Retrieves a list of all available color schemes.
 
-        Retrns
+        Returns
         -------
         color_schemes: [str]
             A list of all available color schemes.
         """
-        return self.presets.keys()
+        return self._presets.keys()
 
     def get_color(self, element_name) -> str:
         """
@@ -86,12 +106,13 @@ class ColorScheme:
         color is not supported by the current preset, fallback to the 'default'
         color scheme.
 
-        Args:
+        Attributes
+        ----------
             element_name (str): The name of the element (e.g., 'flag', 'number_1').
 
-        Returns:
+        Returns
         -------
         color: str
             The hexadecimal color code.
         """
-        return self.presets[self.current_scheme].get(element_name, None)
+        return self._presets[self._current_scheme].get(element_name, None)
