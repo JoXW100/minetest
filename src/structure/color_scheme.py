@@ -16,6 +16,7 @@ class ColorScheme:
         Gets the color for element_name from the current color scheme
     """
 
+    DEFAULT_PRESET = 'default'
     _instance = None
 
     def __new__(cls):
@@ -24,7 +25,7 @@ class ColorScheme:
 
             color_map = st.Color.color_map
             cls._instance._presets = {
-                'default': {
+                ColorScheme.DEFAULT_PRESET: {
                     'flag': color_map["red"],
                     'number_1': color_map["blue"],
                     'number_2': color_map["green"],
@@ -49,9 +50,14 @@ class ColorScheme:
                     'number_8': color_map["blue"],
                     'bomb': color_map["red"],
                     'selected': color_map["green"],
+                },
+                'wild': {
+                    'flag': color_map["magenta"],
+                    'bomb': color_map["white"],
+                    'selected': color_map["magenta"],
                 }
             }
-            cls._instance._current_scheme = "default"
+            cls._instance._current_scheme = ColorScheme.DEFAULT_PRESET
 
         return cls._instance
 
@@ -112,7 +118,16 @@ class ColorScheme:
 
         Returns
         -------
-        color: str
-            The hexadecimal color code.
+        color: str|None
+            The hexadecimal color code or None if the color is not defined in
+            the currently selected color scheme or the default color scheme.
         """
-        return self._presets[self._current_scheme].get(element_name, None)
+        # Lookup the color in the current preset.
+        preset_color = self._presets[self._current_scheme].get(element_name, None)
+
+        # If the color is defined in the current preset, return it.
+        if preset_color is not None:
+            return preset_color
+
+        # Otherwise, try to get it from the default preset.
+        return self._presets[ColorScheme.DEFAULT_PRESET].get(element_name, None)
