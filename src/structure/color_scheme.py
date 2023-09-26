@@ -109,7 +109,7 @@ class ColorScheme:
     def get_color(self, element_name) -> str:
         """
         Get the color for a specific element in the current color scheme. If the
-        color is not supported by the current preset, fallback to the 'default'
+        color is not supported by the current preset, fallback to the default
         color scheme.
 
         Attributes
@@ -118,7 +118,7 @@ class ColorScheme:
 
         Returns
         -------
-        color: str|None
+        color: str | None
             The hexadecimal color code or None if the color is not defined in
             the currently selected color scheme or the default color scheme.
         """
