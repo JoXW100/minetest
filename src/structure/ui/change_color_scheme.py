@@ -1,6 +1,6 @@
 import structure.ui as ui
 from structure import GameData, ColorScheme
-    
+
 class ChangeColorScheme(ui.MenuItem):
     def __init__(self):
         super().__init__()
@@ -12,12 +12,10 @@ class ChangeColorScheme(ui.MenuItem):
             ui.BackItem(), 
             ui.QuitItem()
         ]
-        
+
     def start(self, data: GameData) -> bool:
-        data.size = 4
-        data.mines = 5
         return True
-        
+
     def update(self, data: GameData):
         self._info = '    Available Color Schemes:\n'
 
@@ -30,4 +28,3 @@ class ChangeColorScheme(ui.MenuItem):
                 self._info += "        "
 
             self._info += scheme + "\n"
-        

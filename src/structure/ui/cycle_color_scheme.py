@@ -7,6 +7,7 @@ class CycleColorScheme(ui.MenuItem):
         self._num = num
         self._key = 'C'
         self._title = 'Cycle'
-    
+
     def start(self, _) -> bool:
         ColorScheme().cycle_color_scheme()
+        return False
