@@ -1,4 +1,4 @@
-import os, re
+import os, re, types
 
 os.system('color')
 
@@ -8,18 +8,24 @@ class Color:
     
     Attributes
     ----------
-    color_map : dict{str : str}
+    COLOR_MAP : dict[str, str]
         Name to ANSI color string map
     
     Methods
     -------
+    colored_text(color: str, text: str) -> str
+        Prepares an input string for colored terminal printing
+
+    remove_color(text: str) -> str
+        Remove ANSI color codes from a string based on the provided color map
+
     color_print(color: str, text: str)
         Prints the given text in the specified color
     
     color_print_sequence(color: list[str], text:  list[str])
         Prints a sequence in the given colors
     """
-    color_map = {
+    __COLOR_MAP = {
         'red': '\033[91m',
         'blue': '\033[94m',
         'navy': '\033[34m',
@@ -32,26 +38,9 @@ class Color:
         'reset': '\033[0m',
     }
 
-    @staticmethod
-    def ansi_translate(color_name: str) -> str:
-        """
-        Converts a color string to an ANSI color code string
-
-        Attributes
-        ----------
-        color_name : str
-            The name of the color
-
-        Returns
-        -------
-        ansi_color : str
-            The ANSI color code corresponding to color_name if available,
-            otherwise the ANSI color code for white.
-        """
-        if color_name in Color.color_map:
-            return Color.color_map[color_name]
-        else:
-            return Color.color_map["white"]
+    # Using the MappingProxyType makes the dictionary unable to be modified by
+    # anyone
+    COLOR_MAP = types.MappingProxyType(__COLOR_MAP)
 
     @staticmethod
     def colored_text(color: str, text: str) -> str:
@@ -64,29 +53,37 @@ class Color:
             The color to print the text in
         text : str
             The text to print in color
+
         Returns
         -------
         output : str
             Colored text output ready to be printed
         """
-        return color + text + Color.color_map["reset"]
+        return color + text + Color.__COLOR_MAP["reset"]
 
     @staticmethod
     def remove_color(text: str) -> str:
         """
-        Remove ANSI color codes from a string based on the provided color map.
+        Remove ANSI color codes from a string based on the provided color map
 
-        Args:
-            input_string (str): The input string containing ANSI color codes.
-            color_map (dict): A dictionary mapping color names to ANSI color codes.
+        Attributes
+        ----------
+        input_string : str
+            The input string containing ANSI color codes
+        color_map : dict[str, str] 
+            A dictionary mapping color names to ANSI color codes
 
-        Returns:
-            str: The input string with ANSI color codes removed.
+        Returns
+        -------
+        text : str
+            The input string with ANSI color codes removed
         """
-        pattern = r'\033\[\d+m'  # Regular expression pattern to match ANSI color codes
-        for _, color_code in Color.color_map.items():
+        # Regular expression pattern to match ANSI color codes
+        pattern = r'\033\[\d+m'
+
+        for _, color_code in Color.__COLOR_MAP.items():
             pattern += fr'|\033\[\d+m{re.escape(color_code)}'
-        
+
         return re.sub(pattern, '', text)
 
     @staticmethod
@@ -122,6 +119,6 @@ class Color:
         for (t, c) in zip(text, colors):
             result += c + t
             
-        print(result + Color.color_map["reset"])
+        print(result + Color.__COLOR_MAP["reset"])
 
     

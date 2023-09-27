@@ -31,7 +31,7 @@ class ColorScheme:
         else:
             self.__initialized = True
 
-        color_map = st.Color.color_map
+        color_map = st.Color.COLOR_MAP
         self.__presets = {
             ColorScheme.DEFAULT_PRESET: {
                 'flag': color_map["red"],
