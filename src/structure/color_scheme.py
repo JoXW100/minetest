@@ -9,8 +9,8 @@ class ColorScheme:
     Methods
     -------
     def cycle_color_scheme():
-        Cycles the current color scheme to the next one in the available
-        color schemes
+        Cycles the current color scheme to the next one in order of the
+        available color schemes. Useful for cycling color schemes in a menu
     def get_current_scheme() -> str:
         Retrieves the currently selected color scheme
     def get_color_schemes() -> list[str]:
@@ -60,12 +60,12 @@ class ColorScheme:
     @staticmethod
     def cycle_color_scheme():
         """
-        Sets the current color scheme to the next one in the presets list.
-        Useful for cycling color schemes in a menu.
+        Cycles the current color scheme to the next one in order of the
+        available color schemes. Useful for cycling color schemes in a menu
         """
         presets = list(ColorScheme.__PRESETS.keys())
 
-        # Calculate next idx (this loops around )
+        # Calculate next idx (this loops around)
         next_idx = (presets.index(ColorScheme.__CURRENT_SCHEME) + 1) % len(presets)
 
         ColorScheme.__CURRENT_SCHEME = presets[next_idx]
@@ -77,7 +77,7 @@ class ColorScheme:
 
         Returns
         -------
-        scheme_name: str
+        scheme_name : str
             The name of the color scheme to set
         """
         return ColorScheme.__CURRENT_SCHEME
@@ -89,7 +89,7 @@ class ColorScheme:
 
         Returns
         -------
-        color_schemes: list[str]
+        color_schemes : list[str]
             A list of all available color schemes.
         """
         return ColorScheme.__PRESETS.keys()
@@ -103,11 +103,12 @@ class ColorScheme:
 
         Attributes
         ----------
-            element_name (str): The name of the element (e.g., 'flag', 'number_1').
+        element_name : str
+            The name of the element (e.g., 'flag', 'number_1')
 
         Returns
         -------
-        color: str | None
+        color : str | None
             The hexadecimal color code or None if the color is not defined in
             the currently selected color scheme or the default color scheme.
         """
