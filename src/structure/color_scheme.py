@@ -70,7 +70,7 @@ class ColorScheme:
     def set_color_scheme(self, scheme_name):
         """
         Set the current color scheme. If the color scheme is not in the list
-        of available color schemes (found from get_color_schemesl), nothing
+        of available color schemes (found from get_color_schemes), nothing
         is changed.
 
         Attributes:
@@ -104,13 +104,13 @@ class ColorScheme:
         """
         return self.__current_scheme
 
-    def get_color_schemes(self) -> [str]:
+    def get_color_schemes(self) -> list[str]:
         """
         Retrieves a list of all available color schemes.
 
         Returns
         -------
-        color_schemes: [str]
+        color_schemes: list[str]
             A list of all available color schemes.
         """
         return self.__presets.keys()

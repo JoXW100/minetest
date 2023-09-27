@@ -72,7 +72,7 @@ class Color:
         return color + text + Color.color_map["reset"]
 
     @staticmethod
-    def remove_color(text: str):
+    def remove_color(text: str) -> str:
         """
         Remove ANSI color codes from a string based on the provided color map.
 
