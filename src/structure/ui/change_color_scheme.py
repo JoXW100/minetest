@@ -13,9 +13,6 @@ class ChangeColorScheme(ui.MenuItem):
             ui.QuitItem()
         ]
 
-    def start(self, data: GameData) -> bool:
-        return True
-
     def update(self, data: GameData):
         self._info = '    Available Color Schemes:\n'
 
