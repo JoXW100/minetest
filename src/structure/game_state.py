@@ -326,7 +326,7 @@ class GameState:
         if cell.location == self.selection:
             text = cell_str if cell_str != ' ' else '□'
             text = st.Color.remove_color(text)
-            return st.Color.colored_text(st.ColorScheme().get_color("selected"), text)
+            return st.Color.colored_text(st.ColorScheme.get_color("selected"), text)
 
         return cell_str
 

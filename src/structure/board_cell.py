@@ -59,16 +59,16 @@ class BoardCell:
             and self.mined == other.mined
     
     def __str__(self) -> str:
-        color_scheme = st.ColorScheme()
+        get_color = st.ColorScheme.get_color
 
         if self.mined and self.state is CellState.Visible:
-            return st.Color.colored_text(color_scheme.get_color("bomb"), '○')
+            return st.Color.colored_text(get_color("bomb"), '○')
 
         num = len(self.__board.get_neighbors(self.location, lambda x: x.mined))
         if num > 0 and self.state is CellState.Visible:
-            return st.Color.colored_text(color_scheme.get_color(f"number_{num}"), str(num))
+            return st.Color.colored_text(get_color(f"number_{num}"), str(num))
 
         if self.state is CellState.Flagged:
-            return st.Color.colored_text(color_scheme.get_color("flag"), self.__state.value)
+            return st.Color.colored_text(get_color("flag"), self.__state.value)
 
         return self.__state.value
