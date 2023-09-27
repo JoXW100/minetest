@@ -3,97 +3,75 @@ import structure as st
 
 class ColorScheme:
     """
-    Singleton class for managing colors used when printing the game to the
+    Static class for managing colors used when printing the game to the
     terminal.
 
     Methods
     -------
-    set_color_scheme(scheme_name : str) -> bool
-        Sets the color scheme to one of the available presets
-    get_color_schemes() -> [str]
+    def cycle_color_scheme():
+        Cycles the current color scheme to the next one in the available
+        color schemes
+    def get_current_scheme() -> str:
+        Retrieves the currently selected color scheme
+    def get_color_schemes() -> list[str]:
         Gets a list of all available color schemes
-    get_color(element_name : str) -> str
+    def get_color(element_name) -> str:
         Gets the color for element_name from the current color scheme
     """
 
-    DEFAULT_PRESET = 'default'
-    __instance = None
+    __DEFAULT_PRESET = 'default'
 
-    def __new__(cls):
-        if cls.__instance is None:
-            cls.__instance = super(ColorScheme, cls).__new__(cls)
-            cls.__initialized = False
-        return cls.__instance
-    
-    def __init__(self):
-        if self.__initialized:
-            return
-        else:
-            self.__initialized = True
-
-        color_map = st.Color.COLOR_MAP
-        self.__presets = {
-            ColorScheme.DEFAULT_PRESET: {
-                'flag': color_map["red"],
-                'number_1': color_map["blue"],
-                'number_2': color_map["green"],
-                'number_3': color_map["red"],
-                'number_4': color_map["navy"],
-                'number_5': color_map["magenta"],
-                'number_6': color_map["cyan"],
-                'number_7': color_map["black"],
-                'number_8': color_map["white"],
-                'bomb': color_map["red"],
-                'selected': color_map["green"],
-            },
-            'boring': {
-                'flag': color_map["black"],
-                'number_1': color_map["blue"],
-                'number_2': color_map["blue"],
-                'number_3': color_map["blue"],
-                'number_4': color_map["blue"],
-                'number_5': color_map["blue"],
-                'number_6': color_map["blue"],
-                'number_7': color_map["blue"],
-                'number_8': color_map["blue"],
-                'bomb': color_map["red"],
-                'selected': color_map["green"],
-            },
-            'wild': {
-                'flag': color_map["magenta"],
-                'bomb': color_map["white"],
-                'selected': color_map["magenta"],
-            }
+    __COLOR_MAP = st.Color.COLOR_MAP
+    __CURRENT_SCHEME = __DEFAULT_PRESET
+    __PRESETS = {
+        __DEFAULT_PRESET: {
+            'flag': __COLOR_MAP["red"],
+            'number_1': __COLOR_MAP["blue"],
+            'number_2': __COLOR_MAP["green"],
+            'number_3': __COLOR_MAP["red"],
+            'number_4': __COLOR_MAP["navy"],
+            'number_5': __COLOR_MAP["magenta"],
+            'number_6': __COLOR_MAP["cyan"],
+            'number_7': __COLOR_MAP["black"],
+            'number_8': __COLOR_MAP["white"],
+            'bomb': __COLOR_MAP["red"],
+            'selected': __COLOR_MAP["green"],
+        },
+        'boring': {
+            'flag': __COLOR_MAP["black"],
+            'number_1': __COLOR_MAP["blue"],
+            'number_2': __COLOR_MAP["blue"],
+            'number_3': __COLOR_MAP["blue"],
+            'number_4': __COLOR_MAP["blue"],
+            'number_5': __COLOR_MAP["blue"],
+            'number_6': __COLOR_MAP["blue"],
+            'number_7': __COLOR_MAP["blue"],
+            'number_8': __COLOR_MAP["blue"],
+            'bomb': __COLOR_MAP["red"],
+            'selected': __COLOR_MAP["green"],
+        },
+        'wild': {
+            'flag': __COLOR_MAP["magenta"],
+            'bomb': __COLOR_MAP["white"],
+            'selected': __COLOR_MAP["magenta"],
         }
-        self.__current_scheme = ColorScheme.DEFAULT_PRESET
+    }
 
-    def set_color_scheme(self, scheme_name):
-        """
-        Set the current color scheme. If the color scheme is not in the list
-        of available color schemes (found from get_color_schemes), nothing
-        is changed.
-
-        Attributes:
-        -------
-        scheme_name: str
-            The name of the color scheme to set
-        """
-        if scheme_name in self.__presets:
-            self.__current_scheme = scheme_name
-    
-    def cycle_color_scheme(self):
+    @staticmethod
+    def cycle_color_scheme():
         """
         Sets the current color scheme to the next one in the presets list.
         Useful for cycling color schemes in a menu.
         """
-        presets = list(self.__presets.keys())
+        presets = list(ColorScheme.__PRESETS.keys())
 
         # Calculate next idx (this loops around )
-        next_idx = (presets.index(self.__current_scheme) + 1) % len(presets)
+        next_idx = (presets.index(ColorScheme.__CURRENT_SCHEME) + 1) % len(presets)
 
-        self.__current_scheme = presets[next_idx]
+        ColorScheme.__CURRENT_SCHEME = presets[next_idx]
 
-    def get_current_scheme(self) -> str:
+    @staticmethod
+    def get_current_scheme() -> str:
         """
         Retrieves the currently selected color scheme
 
@@ -102,9 +80,10 @@ class ColorScheme:
         scheme_name: str
             The name of the color scheme to set
         """
-        return self.__current_scheme
+        return ColorScheme.__CURRENT_SCHEME
 
-    def get_color_schemes(self) -> list[str]:
+    @staticmethod
+    def get_color_schemes() -> list[str]:
         """
         Retrieves a list of all available color schemes.
 
@@ -113,9 +92,10 @@ class ColorScheme:
         color_schemes: list[str]
             A list of all available color schemes.
         """
-        return self.__presets.keys()
+        return ColorScheme.__PRESETS.keys()
 
-    def get_color(self, element_name) -> str:
+    @staticmethod
+    def get_color(element_name) -> str:
         """
         Get the color for a specific element in the current color scheme. If the
         color is not supported by the current preset, fallback to the default
@@ -132,11 +112,11 @@ class ColorScheme:
             the currently selected color scheme or the default color scheme.
         """
         # Lookup the color in the current preset.
-        preset_color = self.__presets[self.__current_scheme].get(element_name, None)
+        preset_color = ColorScheme.__PRESETS[ColorScheme.__CURRENT_SCHEME].get(element_name, None)
 
         # If the color is defined in the current preset, return it.
         if preset_color is not None:
             return preset_color
 
         # Otherwise, try to get it from the default preset.
-        return self.__presets[ColorScheme.DEFAULT_PRESET].get(element_name, None)
+        return ColorScheme.__PRESETS[ColorScheme.__DEFAULT_PRESET].get(element_name, None)
