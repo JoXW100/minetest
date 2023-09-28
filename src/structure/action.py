@@ -38,7 +38,7 @@ class Action(metaclass = ABCMeta):
     @abstractmethod
     def get_key() -> KeyCode:
         """
-        Gets the name of the action
+        Gets the key of the action
         
         Returns
         -------
@@ -87,13 +87,13 @@ class Action(metaclass = ABCMeta):
     @property
     def allowed_in_pause(self) -> bool:
         """
-        Returns True if the action is allowed when the game is paused and False
-        if not
-
+        If the action is allowed when the game is paused
+        
         Returns
         -------
         allowed : bool
-            If the action is allowed when the game is paused
+            True if the action is allowed when the game is paused, False 
+            otherwise
         """
         return False
     

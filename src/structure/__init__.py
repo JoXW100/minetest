@@ -1,4 +1,5 @@
 from .color import Color
+from .color_scheme import ColorScheme
 from .location import Location
 from .board_cell import BoardCell, CellState
 from .board import Board

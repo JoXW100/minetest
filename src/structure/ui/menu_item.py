@@ -32,19 +32,38 @@ class MenuItem(metaclass = ABCMeta):
     def update(self, data: GameData):
         """
         Used to update the menu item from changes to the game state
+        
+        Attributes
+        ----------
+        data : GameData 
+            Persistent data between menus.
         """
         pass
     
     def start(self, data: GameData) -> bool:
         """
-        Used to set the initial menu item from values in the game state,
-        returns true if the regular open shall be called
+        Used to set the initial menu item from values in the game state
+        
+        Attributes
+        ----------
+        data : GameData 
+            Persistent data between menus.
+        
+        Returns
+        -------
+        open : bool
+            True if the regular open method should be called, False otherwise
         """
         return True
     
     def open(self, data: GameData):
         """
         The menu was selected, defines how the selection is handled
+        
+        Attributes
+        ----------
+        data : GameData 
+            Persistent data between menus.
         """
         if not self.start(data):
             return

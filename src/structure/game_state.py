@@ -57,9 +57,7 @@ class GameState:
     check_line()
         Recursively checks for a line of pieces from the current location to the opposing side.
     """
-    DRAW = -2
-    PLAYING = -1
-    
+
     def __init__(self, actions: list[st.Action], size: int = 5, mines: int = 0, round: int = 0):
         self.__board = st.Board(size)
         self.__player = st.Player()
@@ -80,7 +78,7 @@ class GameState:
     @property
     def round(self) -> int:
         return self.__round
-        
+
     @property
     def mines(self) -> int:
         return self.__mines
@@ -88,15 +86,15 @@ class GameState:
     @property
     def board(self) -> st.Board:
         return self.__board
-    
+
     @property
     def selection(self) -> st.Location:
         return self.__selection
-    
+
     @property
     def is_paused(self) -> bool:
         return self.__paused
-    
+
     def next_round(self):
         """
         Increments the round counter
@@ -126,7 +124,7 @@ class GameState:
             self.__selection = loc
             return True
         return False
-    
+
     def toggle_pause(self):
         """
         Toggles the paused state of the game
@@ -153,7 +151,7 @@ class GameState:
             res = st.Location(self.selection.x - 1, self.selection.y)
         if res.validate(self.board.size):
             self.__selection = res
-            
+
     def __inner_reveal(self, cell: st.BoardCell):
         """
         This method is used by the :func:`reveal_cell` method on a cell not containing
@@ -178,7 +176,7 @@ class GameState:
                         visited.add(cell.location)
                         if cell.state is st.CellState.Hidden and not cell.mined:
                             stack.appendleft(cell)
-    
+
     def reveal_cell(self, loc: st.Location) -> bool:
         """
         Reveals the cell at the given location if it is hidden. Reveals all
@@ -203,7 +201,7 @@ class GameState:
         else:
             self.__inner_reveal(cell)
             return False
-               
+
     def reveal_and_distribute(self, loc: st.Location, num: int) -> bool:
         """
         Reveals the cell at the given location if it is hidden and not mined. 
@@ -230,7 +228,7 @@ class GameState:
         self.distribute_mines(num)
         self.__inner_reveal(cell)
         return True
-     
+
     def distribute_mines(self, num: int):
         """
         Distributes up to the given number of mines on board cells randomly. 
@@ -252,8 +250,9 @@ class GameState:
     def get_game_status(self) -> GameStatus:
         """
         Checks if the game is over
-        A player has won if their pieces form a line without diagonals from one opposing side to the other.
-        The game is a draw if a player runs out of pieces or the board is full.
+        A player has won if their pieces form a line without diagonals from one
+        opposing side to the other. The game is a draw if a player runs out of
+        pieces or the board is full.
 
         Returns
         -------
@@ -261,7 +260,7 @@ class GameState:
             The status of the current game board
         """
         status = GameStatus.Won
-        
+
         for row in self.board.rows:
             for cell in row:
                 # mined cell revealed -> Lost
@@ -271,7 +270,7 @@ class GameState:
                 if not cell.mined and cell.state is not st.CellState.Visible:
                     status = GameStatus.Playing
         return status
-    
+
     def reveal_mines(self):
         """
         Reveals all the mines on the board by setting their state to visible.
@@ -280,7 +279,7 @@ class GameState:
             for cell in row:
                 if cell.mined:
                     cell.set_state(st.CellState.Visible)
-    
+
     def set_flag_on_mines(self):
         """
         Sets all the mines on the board to be flagged.
@@ -289,7 +288,7 @@ class GameState:
             for cell in row:
                 if cell.mined:
                     cell.set_state(st.CellState.Flagged)
-    
+
     def __get_print_actions_strings(self) -> [str]:
         """
         Collects the strings for all possible actions into a list for printing
@@ -311,7 +310,7 @@ class GameState:
                 strings.append(action.get_name())
 
         return strings
-    
+
     def print_actions(self):
         """
         Prints all the possible actions available to the user at the current
@@ -319,12 +318,17 @@ class GameState:
         """
         for action_str in self.__get_print_actions_strings():
             print(action_str)
-        
+
     def __cell_text(self, cell: st.BoardCell) -> str:
+        cell_str = str(cell)
+
+        # Replace the cell color with "selected" color if the cell is selected.
         if cell.location == self.selection:
-            text = str(cell) if str(cell) != ' ' else '□'
-            return st.Color.colored_text(st.Color.GREEN, text)
-        return str(cell)
+            text = cell_str if cell_str != ' ' else '□'
+            text = st.Color.remove_color(text)
+            return st.Color.colored_text(st.ColorScheme.get_color("selected"), text)
+
+        return cell_str
 
     def print_board(self, print_actions = False):
         """
@@ -438,7 +442,7 @@ class GameState:
             if action.get_key() == key:
                 return action
         return None
-    
+
     def __eq__(self, other: object):
         return isinstance(other, GameState) \
             and self.player == other.player \

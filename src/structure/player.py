@@ -5,9 +5,6 @@ class Player:
     """
     Represents a player and handles how they process their turns
     
-    Attributes
-    ----------
-    
     Methods
     -------
     perform_turn(state : GameState) -> bool
@@ -32,6 +29,7 @@ class Player:
             The current state of the game
         key : str
             The key (character) corresponding to the action to be played
+        
         Returns
         -------
         success : bool
