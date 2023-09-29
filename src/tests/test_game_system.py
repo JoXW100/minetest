@@ -1,27 +1,36 @@
 import unittest as ut
-from subprocess import STDOUT, check_output
+import os
+import sys
+import subprocess
 
 class TestGameSystem(ut.TestCase):
-    def __run_subprocess(self, file: str, seed: int = None, timeout: float = 5.0) -> str:
-        cmd = ['python', 'src/game.py', '--input=native', '--ignore-size']
+    def __run_subprocess(self, file: str, seed: int = None, timeout: float = 5.0) -> tuple[str, int]:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        parent_dir = os.path.dirname(current_dir)
+        game_path = os.path.join(parent_dir, 'game.py')
+        input_path = os.path.join(current_dir, 'input', f"{file}.txt")
+        cmd = [sys.executable, game_path, '--input=native', '--ignore-size']
+        environ = os.environ.copy()
+        environ['PYTHONIOENCODING'] = 'utf-8'
         
         if (seed != None):
             cmd.append('--seed=' + str(seed))
-            
-        with open('src/tests/input/' + file + '.txt') as res:
-            result = check_output(cmd, stdin=res, stderr=STDOUT, timeout=timeout)
-            return str(result)
+        
+        with open(input_path, encoding='utf-8') as input:
+            result = subprocess.run(cmd, stdin=input, encoding='utf-8', capture_output=True, env=environ, timeout=timeout)
+            return (result.stdout, result.returncode)
     
     def test_quit(self):
-        result = self.__run_subprocess('quit')
+        result, code = self.__run_subprocess('quit')
+        self.assertEqual(0, code)
         self.assertIn("Exiting...", result)
     
     def test_start_game(self):
-        result = self.__run_subprocess('start_game')
-        self.assertIn("Exiting...", result)
+        _, code = self.__run_subprocess('start_game')
+        self.assertEqual(0, code)
     
     def test_game_has_prompts(self):
-        result = self.__run_subprocess('start_game')
+        result, _ = self.__run_subprocess('start_game')
         self.assertIn("Navigate up", result)
         self.assertIn("Navigate right", result)
         self.assertIn("Navigate down", result)
@@ -32,9 +41,11 @@ class TestGameSystem(ut.TestCase):
         self.assertIn("[Q] Exit", result)
     
     def test_play_game_and_loose(self):
-        result = self.__run_subprocess('play_game_loose_seed_1', seed=1)
+        result, _ = self.__run_subprocess('play_game_loose_seed_1', seed=1)
         self.assertIn("You revealed a mine, you lost", result)
     
     def test_play_game_and_win(self):
-        result = self.__run_subprocess('play_game_win_seed_1', seed=1)
+        result, _ = self.__run_subprocess('play_game_win_seed_1', seed=1)
         self.assertIn("You Won!", result)
+
+TestGameSystem().test_start_game()

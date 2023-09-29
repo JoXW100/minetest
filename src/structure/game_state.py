@@ -4,6 +4,7 @@ from collections import deque
 from random import randint
 from utils import pad_list
 import os
+import sys
 import structure as st
 
 class PrintConfig(Enum):
@@ -290,13 +291,13 @@ class GameState:
                 if cell.mined:
                     cell.set_state(st.CellState.Flagged)
 
-    def __get_print_actions_strings(self) -> [str]:
+    def __get_print_actions_strings(self) -> list[str]:
         """
         Collects the strings for all possible actions into a list for printing
 
         Returns
         -------
-        action_strings : [str] 
+        action_strings : list[str] 
             A list of all possible actions to play given the current game state
         """
         strings = []
