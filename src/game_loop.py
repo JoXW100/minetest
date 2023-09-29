@@ -1,7 +1,6 @@
 import os
 from pynput import keyboard
 from structure import GameState, GameStatus
-from structure.actions import ALL_ACTIONS
 from utils import translate_key
 
 def clear_terminal():
@@ -43,7 +42,7 @@ def handle_game_state(state: GameState) -> bool:
         clear_terminal()
         state.reveal_mines()
         state.print_board()
-        print("You revelead a mine, you lost.\n\n")
+        print("You revealed a mine, you lost.\n\n")
         input("Press enter to continue...")
             
     return False
@@ -51,7 +50,7 @@ def handle_game_state(state: GameState) -> bool:
 # Used for debug and testing
 global listener
 
-def run(state : GameState):
+def run(state : GameState, input_mode : str = 'pynput'):
     """
     Game loop that runs the game. Prints the board, prints possible actions and
     listens for input from the user.
@@ -64,9 +63,6 @@ def run(state : GameState):
     def on_press(key):
         res = state.player.perform_turn(state, key)
         return not res
-    
-    # Get the input mode from the environment variables.
-    input_mode = os.environ['INPUT_MODE']
 
     # Keep looping while the player has not won/lost yet.
     while handle_game_state(state):

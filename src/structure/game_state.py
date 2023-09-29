@@ -1,10 +1,10 @@
 from __future__ import annotations
-import os
 from enum import Enum
 from collections import deque
 from random import randint
-import structure as st
 from utils import pad_list
+import os
+import structure as st
 
 class PrintConfig(Enum):
     """Class representing board and actions printing configuration"""
@@ -58,7 +58,7 @@ class GameState:
         Recursively checks for a line of pieces from the current location to the opposing side.
     """
 
-    def __init__(self, actions: list[st.Action], size: int = 5, mines: int = 0, round: int = 0):
+    def __init__(self, actions: list[st.Action], size: int = 5, mines: int = 0, round: int = 0, ignore_size: bool = False):
         self.__board = st.Board(size)
         self.__player = st.Player()
         self.__mines = mines
@@ -66,6 +66,7 @@ class GameState:
         self.__selection = st.Location(0, 0)
         self.__round = round
         self.__paused = False
+        self.__ignore_size = ignore_size
 
     @property
     def player(self) -> st.Player:
@@ -395,20 +396,26 @@ class GameState:
         configuration : PrintConfig
            The most suitable print configuration
         """
-        # Get size of the terminal window.
-        (_, t_lines) = os.get_terminal_size()
-        board_print_size = self.board.size + 1
-        blank_lines = 2 # One blank lines below the board and one below actions
-
-        if (board_print_size + len(self.actions) + blank_lines) > t_lines:
-            # Check if we are able to either print all actions or that the total
-            # print board size fits on the window.
-            if len(self.actions) < board_print_size <= t_lines:
-                return PrintConfig.Horizontal
-
-            return PrintConfig.NoneFits
-        else:
+        if (self.__ignore_size):
             return PrintConfig.Vertical
+        
+        # Get size of the terminal window.
+        try:
+            (_, t_lines) = os.get_terminal_size()
+            board_print_size = self.board.size + 1
+            blank_lines = 2 # One blank lines below the board and one below actions
+
+            if (board_print_size + len(self.actions) + blank_lines) > t_lines:
+                # Check if we are able to either print all actions or that the total
+                # print board size fits on the window.
+                if len(self.actions) < board_print_size <= t_lines:
+                    return PrintConfig.Horizontal
+
+                return PrintConfig.NoneFits
+            else:
+                return PrintConfig.Vertical
+        except:
+            return PrintConfig.NoneFits
 
 
     def print_board_and_actions(self):
