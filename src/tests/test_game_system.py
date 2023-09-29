@@ -5,17 +5,25 @@ import subprocess
 
 class TestGameSystem(ut.TestCase):
     def __run_subprocess(self, file: str, seed: int = None, timeout: float = 5.0) -> tuple[str, int]:
+        # The absolute path to this file
         current_dir = os.path.dirname(os.path.abspath(__file__))
         parent_dir = os.path.dirname(current_dir)
+        # the absolute path to the game executable in the parent directory
         game_path = os.path.join(parent_dir, 'game.py')
+        # the absolute path to the input file in the input subdirectory
         input_path = os.path.join(current_dir, 'input', f"{file}.txt")
         cmd = [sys.executable, game_path, '--input=native', '--ignore-size']
+        # Set PYTHONIOENCODING environment variable to change default encoding
+        # for all subprocess function
         environ = os.environ.copy()
         environ['PYTHONIOENCODING'] = 'utf-8'
         
+        # if a seed was specified, add the seed command line argument
         if (seed != None):
             cmd.append('--seed=' + str(seed))
         
+        # open input file and route the content to the standard input of the 
+        # subprocess executing the game
         with open(input_path, encoding='utf-8') as input:
             result = subprocess.run(cmd, stdin=input, encoding='utf-8', capture_output=True, env=environ, timeout=timeout)
             return (result.stdout, result.returncode)
