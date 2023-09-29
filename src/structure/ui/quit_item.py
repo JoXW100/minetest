@@ -8,4 +8,5 @@ class QuitItem(ui.MenuItem):
         self._title = 'Quit'
     
     def start(self, _):
-        sys.exit("Exiting..")
+        print("Exiting...")
+        sys.exit(0)
