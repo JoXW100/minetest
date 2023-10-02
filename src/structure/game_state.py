@@ -181,6 +181,8 @@ class GameState:
         """
         Reveals the cell at the given location if it is hidden. Reveals all
         other hidden cells connected to it if they are not mined.
+        If the cell is visible and the number of flagged neighbors equals the number of mined neighbors,
+        all non-flagged neighbors are revealed.
         
         Attributes
         ----------
@@ -190,16 +192,36 @@ class GameState:
         Returns
         -------
         mined : bool
-            If the revealed cell was mined
+            If a revealed cell was mined
         """
         cell = self.board.select(loc)
-        if cell is None or cell.state is not st.CellState.Hidden:
+        if cell is None or cell.state is st.CellState.Flagged:
             return False
+        # If the cell is mined, reveal it and return True.
         if cell.mined:
             cell.set_state(st.CellState.Visible)
             return True
-        else:
+        # If the cell is hidden, reveal it and all other hidden cells connected to it if they are not mined.
+        elif cell.state is st.CellState.Hidden:
             self.__inner_reveal(cell)
+            return False 
+        # If the cell is visible and the number of flagged neighbors equals the number of mined neighbors,
+        # reveal all non-flagged neighbors.
+        else:
+            # Get the number of flagged and mined neighbors
+            neighbors = self.board.get_neighbors(cell.location)
+            flagged_neighbors = len([n for n in neighbors if n.state is st.CellState.Flagged])
+            mined_neighbors = len([n for n in neighbors if n.mined])
+            if mined_neighbors > 0 and flagged_neighbors == mined_neighbors:
+                # Reveal all hidden neighbors
+                for n in neighbors:
+                    if n.state is st.CellState.Hidden:
+                        # If a revealed cell is mined, return True.
+                        if n.mined:
+                            n.set_state(st.CellState.Visible)
+                            return True
+                        else:
+                            self.__inner_reveal(n)
             return False
 
     def reveal_and_distribute(self, loc: st.Location, num: int) -> bool:
