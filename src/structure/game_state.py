@@ -207,7 +207,7 @@ class GameState:
         # reveal it and all other hidden cells connected to it if they are not mined.
         elif cell.state is st.CellState.Hidden:
             self.__inner_reveal(cell)
-            return False 
+            return False
         
         # If the cell is visible and the number of flagged neighbors equals
         # the number of mined neighbors, reveal all non-flagged neighbors.
