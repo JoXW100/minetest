@@ -212,9 +212,9 @@ class GameState:
             neighbors = self.board.get_neighbors(cell.location)
             flagged_neighbors = len([n for n in neighbors if n.state is st.CellState.Flagged])
             mined_neighbors = len([n for n in neighbors if n.mined])
+            # Reveal all non-flagged neighbors if the number of flagged neighbors equals the number of mined neighbors
             return mined_neighbors > 0 and flagged_neighbors == mined_neighbors \
                 and any([n.state is st.CellState.Hidden and self.reveal_cell(n.location) for n in neighbors])
-            return False
 
     def reveal_and_distribute(self, loc: st.Location, num: int) -> bool:
         """
