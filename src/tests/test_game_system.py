@@ -56,4 +56,64 @@ class TestGameSystem(ut.TestCase):
         result, _ = self.__run_subprocess('play_game_win_seed_1', seed=1)
         self.assertIn("You Won!", result)
 
+    def test_play_game_easy(self):
+        result, _ = self.__run_subprocess('play_standard_easy_seed_1', seed=1)
+        self.assertIn("Difficulty: Easy", result)
+        self.assertIn("│ ■ ■ ■ ■ ■ │", result)
+    
+    def test_play_game_medium(self):
+        result, _ = self.__run_subprocess('play_standard_medium_seed_1', seed=1)
+        self.assertIn("Difficulty: Medium", result)
+        self.assertIn("│ ■ ■ ■ ■ ■ ■ ■ ■ ■ │", result)
+    
+    def test_play_game_hard(self):
+        result, _ = self.__run_subprocess('play_standard_hard_seed_1', seed=1)
+        self.assertIn("Difficulty: Hard", result)
+        self.assertIn("│ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ │", result)
+    
+    def test_play_custom_small(self):
+        result, _ = self.__run_subprocess('play_custom_small_seed_1', seed=1)
+        self.assertIn("Board Size: 4x4", result)
+        self.assertIn("│ ■ ■ ■ ■ │", result)
+    
+    def test_play_custom_large(self):
+        result, _ = self.__run_subprocess('play_custom_large_seed_1', seed=1)
+        self.assertIn("Board Size: 12x12", result)
+        self.assertIn("│ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ │", result)
+    
+    def test_play_custom_min_mines(self):
+        result, _ = self.__run_subprocess('play_custom_min_mines_seed_1', seed=1)
+        self.assertIn("Mines: 1", result)
+        self.assertIn("You Won!", result)
+    
+    def test_play_custom_max_mines(self):
+        result, _ = self.__run_subprocess('play_custom_max_mines_seed_1', seed=1)
+        self.assertIn("Mines: 15", result)
+        self.assertIn("You Won!", result)
+    
+    def play_pause_quit(self):
+        result, _ = self.__run_subprocess('play_pause_quit')
+        self.assertIn("Game is paused!", result)
+        self.assertIn("Exiting...", result)
+    
+    def play_reveal_revealed(self):
+        result, _ = self.__run_subprocess('play_reveal_revealed')
+        self.assertIn("You revealed a mine, you lost.", result)
+    
+    def test_invalid_mines(self):
+        result, _ = self.__run_subprocess('invalid_mines')
+        count = result.count("Invalid value")
+        self.assertGreaterEqual(count, 2)
+        self.assertIn("Exiting...", result)
+    
+    def test_invalid_input(self):
+        result, _ = self.__run_subprocess('invalid_input')
+        count = result.count("Invalid option...")
+        self.assertGreaterEqual(count, 22)
+        self.assertIn("Exiting...", result)
+    
+    def random_menu_navigation(self):
+        result, _ = self.__run_subprocess('random_menu_navigation')
+        self.assertIn("Exiting...", result)   
+
 TestGameSystem().test_start_game()
