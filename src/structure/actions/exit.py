@@ -1,4 +1,4 @@
-import sys
+import os
 from pynput.keyboard import KeyCode
 from structure import Action, GameState, ActionOutcome
 
@@ -17,7 +17,7 @@ class Exit(Action):
     @staticmethod
     def execute(state: GameState) -> ActionOutcome:
         print("Exiting...")
-        sys.exit(0)
+        os._exit(0)
         return ActionOutcome.IGNORE
     
     @staticmethod
