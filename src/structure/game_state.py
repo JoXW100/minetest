@@ -197,22 +197,28 @@ class GameState:
         cell = self.board.select(loc)
         if cell is None or cell.state is st.CellState.Flagged:
             return False
+        
         # If the cell is mined, reveal it and return True.
         if cell.mined:
             cell.set_state(st.CellState.Visible)
             return True
-        # If the cell is hidden, reveal it and all other hidden cells connected to it if they are not mined.
+        
+        # If the cell is hidden,
+        # reveal it and all other hidden cells connected to it if they are not mined.
         elif cell.state is st.CellState.Hidden:
             self.__inner_reveal(cell)
             return False 
-        # If the cell is visible and the number of flagged neighbors equals the number of mined neighbors,
-        # reveal all non-flagged neighbors.
+        
+        # If the cell is visible and the number of flagged neighbors equals
+        # the number of mined neighbors, reveal all non-flagged neighbors.
         else:
             # Get the number of flagged and mined neighbors
             neighbors = self.board.get_neighbors(cell.location)
             flagged_neighbors = len([n for n in neighbors if n.state is st.CellState.Flagged])
             mined_neighbors = len([n for n in neighbors if n.mined])
-            # Reveal all non-flagged neighbors if the number of flagged neighbors equals the number of mined neighbors
+            
+            # Reveal all non-flagged neighbors if the number of flagged neighbors
+            # equals the number of mined neighbors
             return mined_neighbors > 0 and flagged_neighbors == mined_neighbors \
                 and any([n.state is st.CellState.Hidden and self.reveal_cell(n.location) for n in neighbors])
 
