@@ -1,10 +1,9 @@
 from __future__ import annotations
+import os
 from enum import Enum
 from collections import deque
 from random import randint
 from utils import pad_list
-import os
-import sys
 import structure as st
 
 class PrintConfig(Enum):
