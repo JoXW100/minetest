@@ -4,7 +4,7 @@
 
 Minetest is a Python implementation of the classic game Minesweeper for the terminal. It is a text-based game where the player must reveal all of the squares on the board without hitting a mine. If the player hits a mine, the game is over.
 
-The game is played in the terminal by only using the keybord to move around the board and reveal cells. The player is also able to mark cells as suspected mines and pause the game.
+The game is played in the terminal by only using the keyboard to move around the board and reveal cells. The player is also able to mark cells as suspected mines and pause the game.
 
 
 ## Motivation
@@ -17,7 +17,7 @@ The name Minetest is a spin on the original motivation behind this project, from
 
 ## Noteworthy features
 
-- Well thought out and modular menu system which makes it straightforward to add more options and menus.
+- Well-thought-out and modular menu system which makes it straightforward to add more options and menus.
 - Support for smaller terminal sizes by displaying the board and available actions in different configurations.
 - Different color schemes for displaying the board in.
 
@@ -35,9 +35,23 @@ Start the game by running:
 python src/game.py
 ```
 
+### Command line arguments
+
+This project supports the following command line arguments:
+
+`--seed`: Sets the random seed to the specified value. This can be useful for reproducing results or debugging.
+`--input`: Whether to use another input mode than pynput, which is the default. This can be useful for inserting input to the game via other means than a global listener.
+`--ignore-size`: Whether to ignore the terminal size when printing the board.
+
+To use a command line argument, simply pass it to the program when you run it. For example, to set the random seed to 1234, you would run the program as follows:
+
+```
+python src/game.py --seed 1234
+```
+
 ## Testing
 
-To run the all tests, both unit and system tests, navigate into the source directory and run Python's native unit test functionality, which will find and run all defined tests:
+To run all tests, both unit and system tests, navigate into the source directory and run Python's native unit test functionality, which will find and run all defined tests:
 ```
 cd src
 python -m unittest
