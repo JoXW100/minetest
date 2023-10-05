@@ -115,5 +115,3 @@ class TestGameSystem(ut.TestCase):
     def random_menu_navigation(self):
         result, _ = self.__run_subprocess('random_menu_navigation')
         self.assertIn("Exiting...", result)   
-
-TestGameSystem().test_start_game()
