@@ -4,7 +4,9 @@ import sys
 import subprocess
 
 class TestGameSystem(ut.TestCase):
-    def __run_subprocess(self, file: str, seed: int = None, timeout: float = 5.0) -> tuple[str, int]:
+    def __run_subprocess(self, file: str, seed: int = None, \
+        timeout: float = 5.0) -> tuple[str, int]:
+
         # The absolute path to this file
         current_dir = os.path.dirname(os.path.abspath(__file__))
         parent_dir = os.path.dirname(current_dir)
@@ -17,15 +19,22 @@ class TestGameSystem(ut.TestCase):
         # for all subprocess function
         environ = os.environ.copy()
         environ['PYTHONIOENCODING'] = 'utf-8'
-        
+
         # if a seed was specified, add the seed command line argument
-        if (seed != None):
+        if seed is not None:
             cmd.append('--seed=' + str(seed))
-        
-        # open input file and route the content to the standard input of the 
+
+        # open input file and route the content to the standard input of the
         # subprocess executing the game
-        with open(input_path, encoding='utf-8') as input:
-            result = subprocess.run(cmd, stdin=input, encoding='utf-8', capture_output=True, env=environ, timeout=timeout)
+        with open(input_path, encoding='utf-8') as input_file:
+            result = subprocess.run(cmd,
+                                    stdin=input_file,
+                                    encoding='utf-8',
+                                    capture_output=True,
+                                    env=environ,
+                                    timeout=timeout,
+                                    check=False)
+
             return (result.stdout, result.returncode)
     
     def test_quit(self):
@@ -114,6 +123,6 @@ class TestGameSystem(ut.TestCase):
     
     def random_menu_navigation(self):
         result, _ = self.__run_subprocess('random_menu_navigation')
-        self.assertIn("Exiting...", result)   
+        self.assertIn("Exiting...", result)
 
 TestGameSystem().test_start_game()
