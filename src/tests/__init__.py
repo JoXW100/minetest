@@ -11,5 +11,17 @@ ALL_TESTS = [
     TestGameSystem().test_start_game,
     TestGameSystem().test_game_has_prompts,
     TestGameSystem().test_play_game_and_loose,
-    TestGameSystem().test_play_game_and_win
+    TestGameSystem().test_play_game_and_win,
+    TestGameSystem().test_play_game_easy,
+    TestGameSystem().test_play_game_medium,
+    TestGameSystem().test_play_game_hard,
+    TestGameSystem().test_play_custom_small,
+    TestGameSystem().test_play_custom_large,
+    TestGameSystem().test_play_custom_min_mines,
+    TestGameSystem().test_play_custom_max_mines,
+    TestGameSystem().test_play_pause_quit,
+    TestGameSystem().test_play_reveal_revealed,
+    TestGameSystem().test_invalid_mines,
+    TestGameSystem().test_invalid_input,
+    TestGameSystem().test_random_menu_navigation
 ]

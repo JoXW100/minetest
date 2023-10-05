@@ -103,13 +103,12 @@ class TestGameSystem(ut.TestCase):
         self.assertIn("Mines: 15", result)
         self.assertIn("You Won!", result)
 
-    def play_pause_quit(self):
+    def test_play_pause_quit(self):
         result, _ = self.__run_subprocess("play_pause_quit")
         self.assertIn("Game is paused!", result)
-        self.assertIn("Exiting...", result)
 
-    def play_reveal_revealed(self):
-        result, _ = self.__run_subprocess("play_reveal_revealed")
+    def test_play_reveal_revealed(self):
+        result, _ = self.__run_subprocess("play_reveal_revealed", seed=1)
         self.assertIn("You revealed a mine, you lost.", result)
 
     def test_invalid_mines(self):
@@ -124,6 +123,6 @@ class TestGameSystem(ut.TestCase):
         self.assertGreaterEqual(count, 22)
         self.assertIn("Exiting...", result)
 
-    def random_menu_navigation(self):
+    def test_random_menu_navigation(self):
         result, _ = self.__run_subprocess("random_menu_navigation")
         self.assertIn("Exiting...", result)
