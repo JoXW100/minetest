@@ -40,7 +40,9 @@ python src/game.py
 This project supports the following command line arguments:
 
 `--seed`: Sets the random seed to the specified value. This can be useful for reproducing results or debugging.
+
 `--input`: Whether to use another input mode than pynput, which is the default. This can be useful for inserting input to the game via other means than a global listener.
+
 `--ignore-size`: Whether to ignore the terminal size when printing the board.
 
 To use a command line argument, simply pass it to the program when you run it. For example, to set the random seed to 1234, you would run the program as follows:
