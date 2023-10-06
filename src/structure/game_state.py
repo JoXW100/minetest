@@ -350,6 +350,26 @@ class GameState:
 
         return cell_str
 
+    def __get_print_board_top_row(self):
+        """
+        Prepares a string for printing the top row of the board with information
+        about the game such as the number of flagged mines
+
+        Returns
+        -------
+        board_top_row : str
+            A string ready to be printed with the rest of the board
+        """
+        flagged_cells = self.board.get_num_flagged_cells()
+
+        zero_padding = int(math.log10(self.__mines)) + 1
+        fraction_str = f"{flagged_cells:0{zero_padding}d}/{self.__mines:0{zero_padding}d}"
+
+        padding_left = (self.board.size * 2 - 1 - len(fraction_str)) // 2
+        padding_right = self.board.size * 2 - 2 - len(fraction_str) - padding_left
+
+        return f' ┌─{padding_left * "─"}{fraction_str}{padding_right * "─"}──┐'
+
     def print_board(self, print_actions = False):
         """
         Prints the board to the terminal
@@ -367,19 +387,9 @@ class GameState:
         padded_action_strings = pad_list(
             action_strings, None, 1, (print_range - len(action_strings)))
 
-        # Calculations for printing the number of mines still not flagged.
-        flagged_cells = self.board.get_num_flagged_cells()
-        zero_padding = int(math.log10(self.__mines)) + 1
-        fraction_str = f"{flagged_cells:0{zero_padding}d}/{self.__mines:0{zero_padding}d}"
-
-        padding_left = (size * 2 - 1 - len(fraction_str)) // 2
-        padding_right = size * 2 - 2 - len(fraction_str) - padding_left
-
-        top_row = f' ┌─{padding_left * "─"}{fraction_str}{padding_right * "─"}──┐'
-
         for (y, action_str) in zip(range(print_range), padded_action_strings):
             if y == 0:
-                text += top_row
+                text += self.__get_print_board_top_row()
             elif y == (size + 1):
                 text += ' └─' +  '──' * (size - 1) + '──┘'
             else:
