@@ -1,5 +1,6 @@
 from __future__ import annotations
 import os
+import math
 from enum import Enum
 from collections import deque
 from random import randint
@@ -41,8 +42,6 @@ class GameState:
         The current board state
     current_player : player.Player
         The player whose turn it is
-    ai_difficulty : int
-        The difficulty of the AI (0: easy, 1: medium, 2: difficult)
     
     Methods
     -------
@@ -368,9 +367,19 @@ class GameState:
         padded_action_strings = pad_list(
             action_strings, None, 1, (print_range - len(action_strings)))
 
+        # Calculations for printing the number of mines still not flagged.
+        flagged_cells = self.board.get_num_flagged_cells()
+        zero_padding = int(math.log10(self.__mines)) + 1
+        fraction_str = f"{flagged_cells:0{zero_padding}d}/{self.__mines:0{zero_padding}d}"
+
+        padding_left = (size * 2 - 1 - len(fraction_str)) // 2
+        padding_right = size * 2 - 2 - len(fraction_str) - padding_left
+
+        top_row = f' ┌─{padding_left * "─"}{fraction_str}{padding_right * "─"}──┐'
+
         for (y, action_str) in zip(range(print_range), padded_action_strings):
             if y == 0:
-                text += ' ┌─' +  '──' * (size - 1) + '──┐'
+                text += top_row
             elif y == (size + 1):
                 text += ' └─' +  '──' * (size - 1) + '──┘'
             else:
