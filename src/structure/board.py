@@ -78,7 +78,7 @@ class Board:
 
     def get_num_flagged_cells(self) -> int:
         """
-        Calculates the numberof flagged cells on the board.
+        Calculates the number of flagged cells on the board
         
         Returns
         -------
