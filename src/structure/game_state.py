@@ -1,5 +1,6 @@
 from __future__ import annotations
 import os
+import math
 from enum import Enum
 from collections import deque
 from random import randint
@@ -41,8 +42,6 @@ class GameState:
         The current board state
     current_player : player.Player
         The player whose turn it is
-    ai_difficulty : int
-        The difficulty of the AI (0: easy, 1: medium, 2: difficult)
     
     Methods
     -------
@@ -351,6 +350,26 @@ class GameState:
 
         return cell_str
 
+    def __get_print_board_top_row(self) -> str:
+        """
+        Prepares a string for printing the top row of the board with information
+        about the game such as the number of flagged mines
+
+        Returns
+        -------
+        board_top_row : str
+            A string ready to be printed with the rest of the board
+        """
+        flagged_cells = self.board.get_num_flagged_cells()
+
+        zero_padding = int(math.log10(self.__mines)) + 1
+        fraction_str = f"{flagged_cells:0{zero_padding}d}/{self.__mines:0{zero_padding}d}"
+
+        padding_left = (self.board.size * 2 - 1 - len(fraction_str)) // 2
+        padding_right = self.board.size * 2 - 2 - len(fraction_str) - padding_left
+
+        return f' ┌─{padding_left * "─"}{fraction_str}{padding_right * "─"}──┐'
+
     def print_board(self, print_actions = False):
         """
         Prints the board to the terminal
@@ -370,7 +389,7 @@ class GameState:
 
         for (y, action_str) in zip(range(print_range), padded_action_strings):
             if y == 0:
-                text += ' ┌─' +  '──' * (size - 1) + '──┐'
+                text += self.__get_print_board_top_row()
             elif y == (size + 1):
                 text += ' └─' +  '──' * (size - 1) + '──┘'
             else:

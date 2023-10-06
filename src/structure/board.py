@@ -75,8 +75,19 @@ class Board:
             and l.validate(self.size) 
             and filter(self.rows[l.y][l.x])
         ]
-    
-    
+
+    def get_num_flagged_cells(self) -> int:
+        """
+        Calculates the number of flagged cells on the board
+        
+        Returns
+        -------
+        flagged_cells : int
+            The number of cells on the board in state CellState.Flagged
+        """
+        return sum(1 for n in self.get_all_cells()
+                            if n.state is st.CellState.Flagged)
+
     def get_all_cells(self) -> list[st.BoardCell]:
         """
         Creates a list of all the locations on the board
@@ -87,7 +98,7 @@ class Board:
             A list of all the locations on the board
         """
         return [self.rows[y][x] for x in range(self.size) for y in range(self.size)]
-    
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Board) or self.size != other.size:
             return False
@@ -96,7 +107,7 @@ class Board:
                 if cell_a != cell_b:
                     return False
         return True
-    
+
     def __str__(self) -> str:
         text = ""
         for y in range(self.size + 2):

@@ -85,8 +85,8 @@ class TestGameSystem(ut.TestCase):
 
     def test_play_custom_small(self):
         result, _ = self.__run_subprocess("play_custom_small_seed_1", seed=1)
-        self.assertIn("Board Size: 4x4", result)
-        self.assertIn("│ ■ ■ ■ ■ │", result)
+        self.assertIn("Board Size: 5x5", result)
+        self.assertIn("│ ■ ■ ■ ■ ■ │", result)
 
     def test_play_custom_large(self):
         result, _ = self.__run_subprocess("play_custom_large_seed_1", seed=1)

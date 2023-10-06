@@ -8,7 +8,7 @@ class Size5Item(ui.MenuItem):
         self._title = '5x5'
     
     def start(self, data) -> bool:
-        data.difficulty = 0
+        data.size = 5
         raise ui.MenuEvent()
 
 class Size12Item(ui.MenuItem):
