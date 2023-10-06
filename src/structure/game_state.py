@@ -350,7 +350,7 @@ class GameState:
 
         return cell_str
 
-    def __get_print_board_top_row(self):
+    def __get_print_board_top_row(self) -> str:
         """
         Prepares a string for printing the top row of the board with information
         about the game such as the number of flagged mines
