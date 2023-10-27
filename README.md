@@ -11,7 +11,7 @@ The game is played in the terminal by only using the keyboard to move around the
 
 This project was initially started during a course in software testing and was later used as a starting point in a course on maintenance programming. Although there aren't many tests implemented, the tests that have been implemented have been carefully curated and reasoned about to be as concise and comprehensive as possible.
 
-The maintenance that has been performed on the code has mainly been about Additive, Preventative and Perfective maintenance types, as described by Michael Feathers in [Working Effectively with Legacy Code. Prentice Hall PTR, USA. 2004](https://learning.oreilly.com/library/view/working-effectively-with/0131177052/).
+The maintenance that has been performed on the code has mainly been about Additive, Preventative and Perfective maintenance types, as described in the [ISO/IEC/IEEE 14764](https://www.iso.org/standard/80710.html) standard.
 
 The name Minetest is a spin on the original motivation behind this project, from the words minesweeper and testing.
 
